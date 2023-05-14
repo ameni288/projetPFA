@@ -1,5 +1,6 @@
 package projetPFA;
 import java.sql.*;
+
 public class Main {
 
 	public static void main(String[] args) {
@@ -14,24 +15,27 @@ public class Main {
 		System.out.println(e1.username+" "+e1.password+" "+""+e1.email);
 		
 		
-		Login l =new Login();
+		//Login l =new Login();
 		
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			Connection con = DriverManager.getConnection("jdbc:mysql://192.168.188.143/login");
-			Statement st =con.createStatement();
-			ResultSet res = st.executeQuery("select * from loginadmin");
-			
-			while(res.next()) {
-				System.out.println("Login:" + res.getString(1));
-			}
-			
-			
-			
-		}catch(Exception e) {
-			System.out.print(e.getMessage());
-		}
-		
+		 try {
+	            Class.forName("com.mysql.jdbc.Driver");
+	            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/login","root","");
+	            Statement st = con.createStatement();
+	            ResultSet res = st.executeQuery("SELECT * FROM loginadmin");
+
+	            while (res.next()) {
+	                System.out.println("Login: " + res.getString(1));
+	            }
+
+	            // Fermer les ressources
+	            res.close();
+	            st.close();
+	            con.close();
+	        } catch (ClassNotFoundException e) {
+	            e.printStackTrace();
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }		
 		
 
 	}
