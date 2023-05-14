@@ -6,4 +6,5 @@
  *
  */
 module projetPFA {
+	requires java.desktop;
 }

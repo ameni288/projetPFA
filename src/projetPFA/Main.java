@@ -12,6 +12,10 @@ public class Main {
 
 		Etudiant e = new Etudiant("abc","abc","abc@pi.tn"); 
 		System.out.println(e.username+" "+e.password+" "+""+e.email);
+		
+		
+		Login l =new Login();
+		
 
 	}
 
