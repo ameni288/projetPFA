@@ -58,7 +58,7 @@ public class Login extends JFrame {
 	lblNewLabel_1.setBounds(594, 289, 97, 34);
 	getContentPane().add(lblNewLabel_1);
 	
-	txtEnterVotreAdresse = new JTextField("ameni");
+	txtEnterVotreAdresse = new JTextField("");
 	txtEnterVotreAdresse.setBorder(new LineBorder(Color.DARK_GRAY));
 	txtEnterVotreAdresse.setForeground(new Color(0, 0, 0));
 	txtEnterVotreAdresse.setFont(new Font("Sitka Display", Font.PLAIN, 17));
@@ -66,7 +66,7 @@ public class Login extends JFrame {
 	getContentPane().add(txtEnterVotreAdresse);
 	txtEnterVotreAdresse.setColumns(10);
 	
-	txtEntrerVotreMot = new JTextField("1234");
+	txtEntrerVotreMot = new JTextField("");
 	txtEntrerVotreMot.setBorder(new LineBorder(Color.DARK_GRAY));
 	txtEntrerVotreMot.setForeground(new Color(0, 0, 0));
 	txtEntrerVotreMot.setFont(new Font("Sitka Display", Font.PLAIN, 17));
@@ -77,12 +77,20 @@ public class Login extends JFrame {
 	JButton btnNewButton = new JButton("Connexion");
 	btnNewButton.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
-			if(txtEntrerVotreMot.getText().equals("1234") && txtEnterVotreAdresse.getText().equals("ameni")) {
-				AcceuilAdmin ac =new AcceuilAdmin();
-				ac.setVisible(true);
-				dispose(); //setVisible(false);
-			}else {
+			int ath=0;
+			for(int i=0;i<Main.n;i++) {
+			
+				if(txtEnterVotreAdresse.getText().equals(Main.tabLogin[i]) && txtEntrerVotreMot.getText().equals(Main.tabPass[i]) && Main.tabRole[i].equals("admin")) {
+					AcceuilAdmin ac =new AcceuilAdmin();
+					ac.setVisible(true);
+					dispose(); //setVisible(false);
+					ath=1;
+					break;
+				}
+			}
+			if(ath==0) {
 		        JOptionPane.showMessageDialog(null, "Authentification erronée!","Erreur", JOptionPane.ERROR_MESSAGE);
+
 			}
 		}
 	});
