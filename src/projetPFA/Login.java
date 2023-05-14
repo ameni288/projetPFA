@@ -79,7 +79,6 @@ public class Login extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			int ath=0;
 			for(int i=0;i<Main.n;i++) {
-			
 				if(txtEnterVotreAdresse.getText().equals(Main.tabLogin[i]) && txtEntrerVotreMot.getText().equals(Main.tabPass[i]) && Main.tabRole[i].equals("admin")) {
 					AcceuilAdmin ac =new AcceuilAdmin();
 					ac.setVisible(true);
@@ -90,7 +89,6 @@ public class Login extends JFrame {
 			}
 			if(ath==0) {
 		        JOptionPane.showMessageDialog(null, "Authentification erronée!","Erreur", JOptionPane.ERROR_MESSAGE);
-
 			}
 		}
 	});
