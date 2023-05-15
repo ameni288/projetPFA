@@ -21,12 +21,14 @@ import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 import projetPFA.Admin;
 import projetPFA.Login;
-import Admin.ConsulteEtudiant;
+import javax.swing.JTable;
+import javax.swing.JTextField;
 
-public class AcceuilAdmin extends JFrame {
+public class ConsulteEtudiant extends JFrame {
 	private JPanel contentPane;
+	private JTable table;
 	
-	public AcceuilAdmin() {
+	public ConsulteEtudiant() {
 		getContentPane().setForeground(new Color(192, 192, 192));
 		this.setTitle("Gestion de Scolarite PI");
 		setResizable(false);
@@ -53,33 +55,27 @@ public class AcceuilAdmin extends JFrame {
 		txtpnWelcomeAdmin.setBounds(540, 7, 206, 40);
 		panel.add(txtpnWelcomeAdmin);
 		
-		JButton consultAgentBtn = new JButton("Consulter Agent de Scolarité");
+		JButton consultAgentBtn = new JButton("HOME");
 		consultAgentBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				AcceuilAdmin l =new AcceuilAdmin();
+				l.setVisible(true);
+				dispose(); //setVisible(false);
 			}
 		});
 		consultAgentBtn.setBorder(new LineBorder(new Color(128, 128, 128)));
 		consultAgentBtn.setBackground(new Color(128, 128, 128));
-		consultAgentBtn.setBounds(157, 307, 232, 78);
+		consultAgentBtn.setBounds(115, 505, 232, 78);
 		getContentPane().add(consultAgentBtn);
 		
-		JButton consultEtdBtn = new JButton("Consulter Etudiant");
+		JButton consultEtdBtn = new JButton("Delete");
 		consultEtdBtn.setPreferredSize(new Dimension(161, 21));
 		consultEtdBtn.setBorder(new LineBorder(new Color(128, 128, 128)));
 		consultEtdBtn.setBackground(new Color(128, 128, 128));
-		consultEtdBtn.setBounds(543, 307, 223, 68);
+		consultEtdBtn.setBounds(501, 505, 223, 68);
 		getContentPane().add(consultEtdBtn);
 		
-		consultEtdBtn.addActionListener(new ActionListener() {
-    		public void actionPerformed(ActionEvent e) {
-    			ConsulteEtudiant l =new ConsulteEtudiant();
-				l.setVisible(true);
-				dispose(); //setVisible(false);
-    		}
-    	});
-		
-		
-		JButton consultProfBtn = new JButton("Consulter Professeur");
+		JButton consultProfBtn = new JButton("APPLY");
 		consultProfBtn.setPreferredSize(new Dimension(161, 21));
 		consultProfBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -88,8 +84,26 @@ public class AcceuilAdmin extends JFrame {
 	
 		consultProfBtn.setBorder(new LineBorder(new Color(128, 128, 128)));
 		consultProfBtn.setBackground(new Color(128, 128, 128));
-		consultProfBtn.setBounds(920, 307, 212, 66);
+		consultProfBtn.setBounds(878, 505, 212, 66);
 		getContentPane().add(consultProfBtn);
+		
+		   String[][] data = {
+		            { "Kundan Kumar Jha", "4031", "CSE" },
+		            { "Anand Jha", "6014", "IT" }
+		        };
+		 
+		        // Column Names
+		        String[] columnNames = { "Name", "Roll Number", "Department" };
+		
+		table = new JTable(data,columnNames);
+		table.setBounds(103, 116, 901, 292);
+		getContentPane().add(table);
+		
+
+	  
+	        setTitle("Exemple JTable");
+	        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
 		
 
         JMenuBar menuBar = new JMenuBar();
