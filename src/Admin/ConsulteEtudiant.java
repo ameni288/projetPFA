@@ -9,9 +9,18 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.JTextPane;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.awt.event.ActionEvent;
 import javax.swing.JList;
 import javax.swing.JMenuBar;
@@ -27,6 +36,42 @@ import javax.swing.JTextField;
 public class ConsulteEtudiant extends JFrame {
 	private JPanel contentPane;
 	private JTable table;
+    public static String[][] tabEtudiant = new String[20][7];
+	public static int n_etd=0;
+	public static String varId="";
+	
+	public static void getEtudiants() {
+		n_etd=0;
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost/scolarite","root","");
+			Statement st =con.createStatement();
+			ResultSet resEtud = st.executeQuery("select * from etudiant");
+
+			int j=0;
+		
+			while(resEtud.next()) {
+				tabEtudiant[j][0] = resEtud.getString(1);
+				tabEtudiant[j][1] = resEtud.getString(2);
+				tabEtudiant[j][2] = resEtud.getString(3);
+				tabEtudiant[j][3] = resEtud.getString(4);
+				tabEtudiant[j][4] = resEtud.getString(5);
+				tabEtudiant[j][5] = resEtud.getString(6);
+				tabEtudiant[j][6] = resEtud.getString(7);
+				
+				j++;
+				n_etd++;
+			}
+			
+			/*for(int i=0; i<n_etd;i++) {
+				for(int k=0; k<7;k++) {
+				System.out.println(tabEtudiant[i][k]);
+			}}*/
+
+		}catch(Exception e) {
+			System.out.print(e.getMessage());
+		}
+	}
 	
 	public ConsulteEtudiant() {
 		getContentPane().setForeground(new Color(192, 192, 192));
@@ -67,45 +112,110 @@ public class ConsulteEtudiant extends JFrame {
 		consultAgentBtn.setBackground(new Color(128, 128, 128));
 		consultAgentBtn.setBounds(115, 505, 232, 78);
 		getContentPane().add(consultAgentBtn);
-		
-		JButton consultEtdBtn = new JButton("Delete");
-		consultEtdBtn.setPreferredSize(new Dimension(161, 21));
-		consultEtdBtn.setBorder(new LineBorder(new Color(128, 128, 128)));
-		consultEtdBtn.setBackground(new Color(128, 128, 128));
-		consultEtdBtn.setBounds(501, 505, 223, 68);
-		getContentPane().add(consultEtdBtn);
-		
-		JButton consultProfBtn = new JButton("APPLY");
-		consultProfBtn.setPreferredSize(new Dimension(161, 21));
-		consultProfBtn.addActionListener(new ActionListener() {
+	
+		JButton applyBtn = new JButton("APPLY");
+		applyBtn.setPreferredSize(new Dimension(161, 21));
+		applyBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				int selectedRow = table.getSelectedRow();
+	            if (selectedRow != -1) {
+	                String VID = table.getValueAt(selectedRow, 0).toString();
+	                String VNOM = table.getValueAt(selectedRow, 1).toString();
+	                String VPRENOM = table.getValueAt(selectedRow, 2).toString();
+	                String VNIVEAU = table.getValueAt(selectedRow, 3).toString();
+	                String VLOGIN = table.getValueAt(selectedRow, 4).toString();
+	                String VPASSWORD = table.getValueAt(selectedRow, 5).toString();
+	                String VCIN = table.getValueAt(selectedRow, 6).toString();
+	            	System.out.println(VID);
+	            	System.out.println(VNOM);
+	            	System.out.println(VPRENOM);
+	            	System.out.println(VNIVEAU);
+	            	System.out.println(VPASSWORD);
+	            	System.out.println(VCIN);
+
+	                try {
+						Class.forName("com.mysql.jdbc.Driver");
+						Connection con = DriverManager.getConnection("jdbc:mysql://localhost/scolarite","root","");
+						Statement st =con.createStatement();
+		                String query = "INSERT INTO etudiant(ID, NOM, PRENOM, NIVEAU, LOGIN, PASSWORD, CIN) VALUES ('"+VID+"', '"+VNOM+"', '"+VPRENOM+"', '"+VNIVEAU+"', '"+VLOGIN+"', '"+VPASSWORD+"', '"+VCIN+"')";
+						st.executeUpdate(query);
+						getEtudiants();
+						table.revalidate();
+		                table.repaint();
+						
+					} catch (ClassNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+	            }
+				
 			}
 		});
 	
-		consultProfBtn.setBorder(new LineBorder(new Color(128, 128, 128)));
-		consultProfBtn.setBackground(new Color(128, 128, 128));
-		consultProfBtn.setBounds(878, 505, 212, 66);
-		getContentPane().add(consultProfBtn);
+		applyBtn.setBorder(new LineBorder(new Color(128, 128, 128)));
+		applyBtn.setBackground(new Color(128, 128, 128));
+		applyBtn.setBounds(878, 505, 212, 66);
+		getContentPane().add(applyBtn);
 		
-		   String[][] data = {
-		            { "Kundan Kumar Jha", "4031", "CSE" },
-		            { "Anand Jha", "6014", "IT" }
-		        };
-		 
-		        // Column Names
-		        String[] columnNames = { "Name", "Roll Number", "Department" };
+		getEtudiants();
 		
-		table = new JTable(data,columnNames);
-		table.setBounds(103, 116, 901, 292);
+		String[] columnNames = { "ID", "Nom", "Prenom", "CIN", "Login","Password","Niveau" };
+		
+		table = new JTable(tabEtudiant,columnNames);
+		table.setBounds(103, 116, 901, 320);
 		getContentPane().add(table);
 		
-
-	  
-	        setTitle("Exemple JTable");
-	        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
 		
-
+		
+		table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+		    public void valueChanged(ListSelectionEvent e) {
+		        if (!e.getValueIsAdjusting()) { 
+		            int selectedRow = table.getSelectedRow();
+		            if (selectedRow != -1) {
+		                Object value = table.getValueAt(selectedRow, 0);
+		               // System.out.println("Row: " + selectedRow);
+		                //System.out.println("Value at column 0: " + value);
+		                varId=(String) value;
+		               // System.out.println(varId);
+		            }
+		        }
+		    }
+		  
+		});
+        
+		JButton deletedBtn = new JButton("Delete");
+		deletedBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					Class.forName("com.mysql.jdbc.Driver");
+					Connection con = DriverManager.getConnection("jdbc:mysql://localhost/scolarite","root","");
+					Statement st =con.createStatement();
+					String query = "DELETE FROM etudiant WHERE id ="+ varId;
+					st.executeUpdate(query);
+					getEtudiants();
+					 table.revalidate();
+	                    table.repaint();
+					
+				} catch (ClassNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+		deletedBtn.setPreferredSize(new Dimension(161, 21));
+		deletedBtn.setBorder(new LineBorder(new Color(128, 128, 128)));
+		deletedBtn.setBackground(new Color(128, 128, 128));
+		deletedBtn.setBounds(501, 505, 223, 68);
+		getContentPane().add(deletedBtn);
+		
+	  
+	  
         JMenuBar menuBar = new JMenuBar();
         JMenu fileMenu = new JMenu("Settings");
         JMenuItem changerItem = new JMenuItem("Changer mot de passe");
