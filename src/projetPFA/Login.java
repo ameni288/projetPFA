@@ -17,10 +17,15 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import Admin.AcceuilAdmin;
+import Professeur.AcceuilProfesseur;
+import Etudiant.AcceuilEtudiant;
+import Agent.AcceuilAgent;
+import javax.swing.JPasswordField;
 
 public class Login extends JFrame {
 	private JTextField txtEnterVotreAdresse;
 	private JTextField txtEntrerVotreMot;
+	private JPasswordField passwordField;
 
 	public Login() {
 	getContentPane().setForeground(new Color(192, 192, 192));
@@ -66,7 +71,10 @@ public class Login extends JFrame {
 	getContentPane().add(txtEnterVotreAdresse);
 	txtEnterVotreAdresse.setColumns(10);
 	
-	txtEntrerVotreMot = new JTextField("1234");
+	
+	txtEntrerVotreMot = new JPasswordField("1234");
+	txtEntrerVotreMot.setBounds(448, 390, 389, 19);
+	this.setVisible(true);
 	txtEntrerVotreMot.setBorder(new LineBorder(Color.DARK_GRAY));
 	txtEntrerVotreMot.setForeground(new Color(0, 0, 0));
 	txtEntrerVotreMot.setFont(new Font("Sitka Display", Font.PLAIN, 17));
@@ -78,9 +86,30 @@ public class Login extends JFrame {
 	btnNewButton.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 			int ath=0;
-			for(int i=0;i<Main.n;i++) {
-				if(txtEnterVotreAdresse.getText().equals(Main.tabLogin[i]) && txtEntrerVotreMot.getText().equals(Main.tabPass[i]) && Main.tabRole[i].equals("admin")) {
+			for(int i=0;i<Main.auth.length;i++) {
+				if(txtEnterVotreAdresse.getText().equals(Main.auth[i].login) && txtEntrerVotreMot.getText().equals(Main.auth[i].password) && Main.auth[i].role.equals("admin")) {
 					AcceuilAdmin ac =new AcceuilAdmin();
+					ac.setVisible(true);
+					dispose(); //setVisible(false);
+					ath=1;
+					break;
+				}
+				
+				else if(txtEnterVotreAdresse.getText().equals(Main.auth[i].login) && txtEntrerVotreMot.getText().equals(Main.auth[i].password) && Main.auth[i].role.equals("professeur")) {
+					AcceuilProfesseur ac =new AcceuilProfesseur();
+					ac.setVisible(true);
+					dispose(); //setVisible(false);
+					ath=1;
+					break;
+				}
+				else if(txtEnterVotreAdresse.getText().equals(Main.auth[i].login) && txtEntrerVotreMot.getText().equals(Main.auth[i].password) && Main.auth[i].role.equals("agent")) {
+					AcceuilAgent ac =new AcceuilAgent();
+					ac.setVisible(true);
+					dispose(); //setVisible(false);
+					ath=1;
+					break;
+				}else if(txtEnterVotreAdresse.getText().equals(Main.auth[i].login) && txtEntrerVotreMot.getText().equals(Main.auth[i].password) && Main.auth[i].role.equals("etudiant")) {
+					AcceuilEtudiant ac =new AcceuilEtudiant();
 					ac.setVisible(true);
 					dispose(); //setVisible(false);
 					ath=1;
@@ -108,7 +137,8 @@ public class Login extends JFrame {
 	btnNewButton_1.setBackground(new Color(128, 128, 128));
 	btnNewButton_1.setBounds(447, 454, 95, 31);
 	getContentPane().add(btnNewButton_1);
-	this.setVisible(true);
+	
+	
 	
 }
 }

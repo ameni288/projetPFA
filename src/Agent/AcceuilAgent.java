@@ -1,4 +1,4 @@
-package Admin;
+package Agent;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -21,10 +21,10 @@ import javax.swing.JPopupMenu;
 import projetPFA.Login;
 import Admin.ConsulteEtudiant;
 
-public class AcceuilAdmin extends JFrame {
+public class AcceuilAgent extends JFrame {
 	private JPanel contentPane;
 	
-	public AcceuilAdmin() {
+	public AcceuilAgent() {
 		getContentPane().setForeground(new Color(192, 192, 192));
 		this.setTitle("Gestion de Scolarite PI");
 		setResizable(false);
@@ -47,16 +47,14 @@ public class AcceuilAdmin extends JFrame {
 		txtpnWelcomeAdmin.setForeground(new Color(255, 255, 255));
 		txtpnWelcomeAdmin.setBackground(new Color(227, 0, 0));
 		txtpnWelcomeAdmin.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 24));
-		txtpnWelcomeAdmin.setText("Bienvenue Admin");
-		txtpnWelcomeAdmin.setBounds(540, 7, 206, 40);
+		txtpnWelcomeAdmin.setText("Bienvenue Agent");
+		txtpnWelcomeAdmin.setBounds(457, 7, 372, 40);
 		panel.add(txtpnWelcomeAdmin);
 		
 		JButton consultAgentBtn = new JButton("Consulter Agent de Scolarité");
 		consultAgentBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ConsulterAgent l =new ConsulterAgent();
-				l.setVisible(true);
-				dispose(); //setVisible(false);
+			
 				
 			}
 		});
@@ -74,9 +72,7 @@ public class AcceuilAdmin extends JFrame {
 		
 		consultEtdBtn.addActionListener(new ActionListener() {
     		public void actionPerformed(ActionEvent e) {
-    			ConsulteEtudiant l =new ConsulteEtudiant();
-				l.setVisible(true);
-				dispose(); //setVisible(false);
+    			
     		}
     	});
 		
@@ -85,9 +81,7 @@ public class AcceuilAdmin extends JFrame {
 		consultProfBtn.setPreferredSize(new Dimension(161, 21));
 		consultProfBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ConsulteProf l =new ConsulteProf();
-				l.setVisible(true);
-				dispose(); //setVisible(false);
+				
 			}
 		});
 	
@@ -102,9 +96,7 @@ public class AcceuilAdmin extends JFrame {
         JMenuItem changerItem = new JMenuItem("Changer mot de passe");
         changerItem.addActionListener(new ActionListener() {
     		public void actionPerformed(ActionEvent e) {
-    			ChangerPassword l =new ChangerPassword();
-				l.setVisible(true);
-				dispose(); //setVisible(false);
+    			
     		}
     	});
         JMenuItem logoutItem = new JMenuItem("Déconnexion");
