@@ -1,10 +1,10 @@
 package Admin;
 
 import java.awt.Color;
+import javax.swing.JScrollPane;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -21,6 +21,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Arrays;
 import java.awt.event.ActionEvent;
 import javax.swing.JList;
 import javax.swing.JMenuBar;
@@ -28,7 +29,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
-import projetPFA.Admin;
 import projetPFA.Login;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -36,7 +36,7 @@ import javax.swing.JTextField;
 public class ConsulteEtudiant extends JFrame {
 	private JPanel contentPane;
 	private JTable table;
-    public static String[][] tabEtudiant = new String[20][7];
+    public static String[][] tabEtudiant = new String[100][7];
 	public static int n_etd=0;
 	public static String varId="";
 	
@@ -63,16 +63,31 @@ public class ConsulteEtudiant extends JFrame {
 				n_etd++;
 			}
 			
-			/*for(int i=0; i<n_etd;i++) {
-				for(int k=0; k<7;k++) {
-				System.out.println(tabEtudiant[i][k]);
-			}}*/
-
 		}catch(Exception e) {
 			System.out.print(e.getMessage());
 		}
 	}
 	
+	public static void DeleteEtudiant(){
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost/scolarite","root","");
+			Statement st =con.createStatement();
+			String query = "DELETE FROM Etudiant WHERE id = "+varId;
+			st.executeUpdate(query);
+			for (int i = 0; i < tabEtudiant.length; i++) {
+			    for (int j = 0; j < 7; j++) {
+			        tabEtudiant[i][j] = null;
+			    }
+			}
+			getEtudiants();
+			
+		} catch (ClassNotFoundException e1) {
+			e1.printStackTrace();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+	}	
 	public ConsulteEtudiant() {
 		getContentPane().setForeground(new Color(192, 192, 192));
 		this.setTitle("Gestion de Scolarite PI");
@@ -105,7 +120,7 @@ public class ConsulteEtudiant extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				AcceuilAdmin l =new AcceuilAdmin();
 				l.setVisible(true);
-				dispose(); //setVisible(false);
+				dispose();
 			}
 		});
 		consultAgentBtn.setBorder(new LineBorder(new Color(128, 128, 128)));
@@ -126,28 +141,40 @@ public class ConsulteEtudiant extends JFrame {
 	                String VLOGIN = table.getValueAt(selectedRow, 4).toString();
 	                String VPASSWORD = table.getValueAt(selectedRow, 5).toString();
 	                String VCIN = table.getValueAt(selectedRow, 6).toString();
-	            	System.out.println(VID);
-	            	System.out.println(VNOM);
-	            	System.out.println(VPRENOM);
-	            	System.out.println(VNIVEAU);
-	            	System.out.println(VPASSWORD);
-	            	System.out.println(VCIN);
-
+	            
 	                try {
 						Class.forName("com.mysql.jdbc.Driver");
 						Connection con = DriverManager.getConnection("jdbc:mysql://localhost/scolarite","root","");
 						Statement st =con.createStatement();
-		                String query = "INSERT INTO etudiant(ID, NOM, PRENOM, NIVEAU, LOGIN, PASSWORD, CIN) VALUES ('"+VID+"', '"+VNOM+"', '"+VPRENOM+"', '"+VNIVEAU+"', '"+VLOGIN+"', '"+VPASSWORD+"', '"+VCIN+"')";
-						st.executeUpdate(query);
-						getEtudiants();
-						table.revalidate();
-		                table.repaint();
+						if(VID == null) {
+							   String query = "INSERT INTO etudiant(ID, NOM, PRENOM, NIVEAU, LOGIN, PASSWORD, CIN) VALUES ('"+VID+"', '"+VNOM+"', '"+VPRENOM+"', '"+VNIVEAU+"', '"+VLOGIN+"', '"+VPASSWORD+"', '"+VCIN+"')";
+								st.executeUpdate(query);
+								for (int i = 0; i < tabEtudiant.length; i++) {
+								    for (int j = 0; j < 7; j++) {
+								        tabEtudiant[i][j] = null;
+								    }
+								}
+								getEtudiants();
+								table.revalidate();
+				                table.repaint();
+						}else {
+							DeleteEtudiant();
+							 String query = "INSERT INTO etudiant(ID, NOM, PRENOM, NIVEAU, LOGIN, PASSWORD, CIN) VALUES ('"+VID+"', '"+VNOM+"', '"+VPRENOM+"', '"+VNIVEAU+"', '"+VLOGIN+"', '"+VPASSWORD+"', '"+VCIN+"')";
+								st.executeUpdate(query);
+								for (int i = 0; i < tabEtudiant.length; i++) {
+								    for (int j = 0; j < 7; j++) {
+								        tabEtudiant[i][j] = null; 
+								    }
+								}
+							getEtudiants();
+							table.revalidate();
+				            table.repaint();
+						}
+		             
 						
 					} catch (ClassNotFoundException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 	            }
@@ -165,9 +192,14 @@ public class ConsulteEtudiant extends JFrame {
 		String[] columnNames = { "ID", "Nom", "Prenom", "CIN", "Login","Password","Niveau" };
 		
 		table = new JTable(tabEtudiant,columnNames);
-		table.setBounds(103, 116, 901, 320);
-		getContentPane().add(table);
-		
+		table.setSurrendersFocusOnKeystroke(true);
+		table.setBounds(137, 96, 901, 380);
+		//getContentPane().add(table);
+
+		JScrollPane scrollPane = new JScrollPane(table); // Wrap the table in a JScrollPane
+
+		scrollPane.setBounds(137, 96, 901, 380);
+		getContentPane().add(scrollPane);
 		
 		
 		table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
@@ -176,10 +208,7 @@ public class ConsulteEtudiant extends JFrame {
 		            int selectedRow = table.getSelectedRow();
 		            if (selectedRow != -1) {
 		                Object value = table.getValueAt(selectedRow, 0);
-		               // System.out.println("Row: " + selectedRow);
-		                //System.out.println("Value at column 0: " + value);
 		                varId=(String) value;
-		               // System.out.println(varId);
 		            }
 		        }
 		    }
@@ -189,23 +218,9 @@ public class ConsulteEtudiant extends JFrame {
 		JButton deletedBtn = new JButton("Delete");
 		deletedBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					Class.forName("com.mysql.jdbc.Driver");
-					Connection con = DriverManager.getConnection("jdbc:mysql://localhost/scolarite","root","");
-					Statement st =con.createStatement();
-					String query = "DELETE FROM etudiant WHERE id ="+ varId;
-					st.executeUpdate(query);
-					getEtudiants();
-					 table.revalidate();
-	                    table.repaint();
-					
-				} catch (ClassNotFoundException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				DeleteEtudiant();
+				table.revalidate();
+	            table.repaint();
 			}
 		});
 		deletedBtn.setPreferredSize(new Dimension(161, 21));
@@ -215,7 +230,6 @@ public class ConsulteEtudiant extends JFrame {
 		getContentPane().add(deletedBtn);
 		
 	  
-	  
         JMenuBar menuBar = new JMenuBar();
         JMenu fileMenu = new JMenu("Settings");
         JMenuItem changerItem = new JMenuItem("Changer mot de passe");
@@ -223,7 +237,7 @@ public class ConsulteEtudiant extends JFrame {
     		public void actionPerformed(ActionEvent e) {
     			ChangerPassword l =new ChangerPassword();
 				l.setVisible(true);
-				dispose(); //setVisible(false);
+				dispose(); 
     		}
     	});
         JMenuItem logoutItem = new JMenuItem("Déconnexion");
@@ -231,7 +245,7 @@ public class ConsulteEtudiant extends JFrame {
     		public void actionPerformed(ActionEvent e) {
     			Login l =new Login();
 				l.setVisible(true);
-				dispose(); //setVisible(false);
+				dispose(); 
     		}
     	});
         fileMenu.add(changerItem);
@@ -241,6 +255,5 @@ public class ConsulteEtudiant extends JFrame {
         setJMenuBar(menuBar);
         setVisible(true);
 		
-	
 	}
 }
