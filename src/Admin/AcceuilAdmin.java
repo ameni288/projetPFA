@@ -51,25 +51,11 @@ public class AcceuilAdmin extends JFrame {
 		txtpnWelcomeAdmin.setBounds(540, 7, 206, 40);
 		panel.add(txtpnWelcomeAdmin);
 		
-		JButton consultAgentBtn = new JButton("Consulter Agent de Scolarité");
-		consultAgentBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				ConsulterAgent l =new ConsulterAgent();
-				l.setVisible(true);
-				dispose(); //setVisible(false);
-				
-			}
-		});
-		consultAgentBtn.setBorder(new LineBorder(new Color(128, 128, 128)));
-		consultAgentBtn.setBackground(new Color(128, 128, 128));
-		consultAgentBtn.setBounds(157, 307, 232, 78);
-		getContentPane().add(consultAgentBtn);
-		
 		JButton consultEtdBtn = new JButton("Consulter Etudiant");
 		consultEtdBtn.setPreferredSize(new Dimension(161, 21));
 		consultEtdBtn.setBorder(new LineBorder(new Color(128, 128, 128)));
 		consultEtdBtn.setBackground(new Color(128, 128, 128));
-		consultEtdBtn.setBounds(543, 307, 223, 68);
+		consultEtdBtn.setBounds(577, 306, 223, 68);
 		getContentPane().add(consultEtdBtn);
 		
 		consultEtdBtn.addActionListener(new ActionListener() {
@@ -95,6 +81,34 @@ public class AcceuilAdmin extends JFrame {
 		consultProfBtn.setBackground(new Color(128, 128, 128));
 		consultProfBtn.setBounds(920, 307, 212, 66);
 		getContentPane().add(consultProfBtn);
+		
+		JButton consultEtdBtn_1 = new JButton("Consulter Groupe");
+		consultEtdBtn_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ConsulterGroupe l =new ConsulterGroupe();
+				l.setVisible(true);
+				dispose(); //setVisible(false);
+			}
+		});
+		consultEtdBtn_1.setPreferredSize(new Dimension(161, 21));
+		consultEtdBtn_1.setBorder(new LineBorder(new Color(128, 128, 128)));
+		consultEtdBtn_1.setBackground(Color.GRAY);
+		consultEtdBtn_1.setBounds(246, 306, 223, 68);
+		getContentPane().add(consultEtdBtn_1);
+		
+		JButton consultEtdBtn_2 = new JButton("Consulter Matiere");
+		consultEtdBtn_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ConsulterMatiere l =new ConsulterMatiere();
+				l.setVisible(true);
+				dispose(); //setVisible(false);
+			}
+		});
+		consultEtdBtn_2.setPreferredSize(new Dimension(161, 21));
+		consultEtdBtn_2.setBorder(new LineBorder(new Color(128, 128, 128)));
+		consultEtdBtn_2.setBackground(Color.GRAY);
+		consultEtdBtn_2.setBounds(546, 189, 223, 68);
+		getContentPane().add(consultEtdBtn_2);
 		
 
         JMenuBar menuBar = new JMenuBar();

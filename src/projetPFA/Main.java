@@ -48,21 +48,7 @@ public class Main {
 			System.out.print(e.getMessage());
 		}
 		
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			Connection con = DriverManager.getConnection("jdbc:mysql://localhost/scolarite","root","");
-			Statement st =con.createStatement();
-			ResultSet res = st.executeQuery("select * from agent");
-		
-		
-			while(res.next()) {
-				auth[i]=new Authentification(res.getString(4) , res.getString(5),"agent");
-				i++;
-				n++;
-			}
-		}catch(Exception e) {
-			System.out.print(e.getMessage());
-		}
+
 		
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -81,10 +67,10 @@ public class Main {
 		}
 		
 		
-		for (int j=0;j<auth.length;j++) {
+		/*for (int j=0;j<auth.length;j++) {
 			System.out.println(auth[j].login);
 			
-		}
+		}*/
 	}
 
 }

@@ -36,12 +36,12 @@ import javax.swing.JTextField;
 public class ConsulteProf extends JFrame {
 	private JPanel contentPane;
 	private JTable table;
-    public static String[][] tabProfs = new String[100][7];
-	public static int n_etd=0;
+    public static String[][] tabProfs = new String[100][8];
+	public static int n_prof=0;
 	public static String varId="";
 	
 	public static void getProfs() {
-		n_etd=0;
+		n_prof=0;
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://localhost/scolarite","root","");
@@ -58,9 +58,11 @@ public class ConsulteProf extends JFrame {
 				tabProfs[j][4] = resEtud.getString(5);
 				tabProfs[j][5] = resEtud.getString(6);
 				tabProfs[j][6] = resEtud.getString(7);
+				tabProfs[j][7] = resEtud.getString(8);
+
 				
 				j++;
-				n_etd++;
+				n_prof++;
 			}
 			
 		}catch(Exception e) {
@@ -76,7 +78,7 @@ public class ConsulteProf extends JFrame {
 			String query = "DELETE FROM professeur WHERE id = "+varId;
 			st.executeUpdate(query);
 			for (int i = 0; i < tabProfs.length; i++) {
-			    for (int j = 0; j < 7; j++) {
+			    for (int j = 0; j < 8; j++) {
 			    	tabProfs[i][j] = null;
 			    }
 			}
@@ -137,21 +139,22 @@ public class ConsulteProf extends JFrame {
 	                String VID = table.getValueAt(selectedRow, 0).toString();
 	                String VNOM = table.getValueAt(selectedRow, 1).toString();
 	                String VPRENOM = table.getValueAt(selectedRow, 2).toString();
-	                String VCNSS = table.getValueAt(selectedRow, 3).toString();
-	                String VLOGIN = table.getValueAt(selectedRow, 4).toString();
-	                String VPASSWORD = table.getValueAt(selectedRow, 5).toString();
+	                String VLOGIN = table.getValueAt(selectedRow, 3).toString();
+	                String VPASSWORD = table.getValueAt(selectedRow, 4).toString();
+	                String VCNSS = table.getValueAt(selectedRow, 5).toString();
 	                String VHIREDATE = table.getValueAt(selectedRow, 6).toString();
+	                String IDMATIERE = table.getValueAt(selectedRow, 7).toString();
+
 	            
 	                try {
 						Class.forName("com.mysql.jdbc.Driver");
 						Connection con = DriverManager.getConnection("jdbc:mysql://localhost/scolarite","root","");
 						Statement st =con.createStatement();
 						if(VID == null) {
-
-							   String query = "INSERT INTO professeur(`ID`, `NOM`, `PRENOM`, `LOGIN`, `PASSWORD`, `CNSS`, `HIREDATE`) VALUES ('"+VID+"', '"+VNOM+"', '"+VPRENOM+"', '"+VLOGIN+"', '"+VPASSWORD+"', '"+VCNSS+"', '"+VHIREDATE+"')";
+							String query = "INSERT INTO professeur(`ID`, `NOM`, `PRENOM`, `LOGIN`, `PASSWORD`, `CNSS`, `HIREDATE`, `IDMATIERE`) VALUES ('" + VID + "', '" + VNOM + "', '" + VPRENOM + "', '" + VLOGIN + "', '" + VPASSWORD + "', '" + VCNSS + "', '" + VHIREDATE + "', '" + IDMATIERE + "')";
 								st.executeUpdate(query);
 								for (int i = 0; i < tabProfs.length; i++) {
-								    for (int j = 0; j < 7; j++) {
+								    for (int j = 0; j < 8; j++) {
 								    	tabProfs[i][j] = null;
 								    }
 								}
@@ -160,10 +163,10 @@ public class ConsulteProf extends JFrame {
 				                table.repaint();
 						}else {
 							DeleteProf();
-							 String query = "INSERT INTO professeur(ID, NOM, PRENOM, LOGIN, PASSWORD, `CNSS`, `HIREDATE`) VALUES ('"+VID+"', '"+VNOM+"', '"+VPRENOM+"', '"+VLOGIN+"', '"+VPASSWORD+"', '"+VCNSS+"', '"+VHIREDATE+"')";
+							String query = "INSERT INTO professeur(`ID`, `NOM`, `PRENOM`, `LOGIN`, `PASSWORD`, `CNSS`, `HIREDATE`, `IDMATIERE`) VALUES ('" + VID + "', '" + VNOM + "', '" + VPRENOM + "', '" + VLOGIN + "', '" + VPASSWORD + "', '" + VCNSS + "', '" + VHIREDATE + "', '" + IDMATIERE + "')";
 								st.executeUpdate(query);
 								for (int i = 0; i < tabProfs.length; i++) {
-								    for (int j = 0; j < 7; j++) {
+								    for (int j = 0; j < 8; j++) {
 								    	tabProfs[i][j] = null; 
 								    }
 								}
@@ -190,7 +193,7 @@ public class ConsulteProf extends JFrame {
 		
 		getProfs();
 		
-		String[] columnNames = { "ID", "Nom", "Prenom", "Login","Password","Cnss","Hire Date" };
+		String[] columnNames = { "ID", "Nom", "Prenom", "Login","Password","Cnss","Hire Date","ID Matière" };
 		
 		table = new JTable(tabProfs,columnNames);
 		table.setSurrendersFocusOnKeystroke(true);

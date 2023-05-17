@@ -19,7 +19,6 @@ import javax.swing.JButton;
 import Admin.AcceuilAdmin;
 import Professeur.AcceuilProfesseur;
 import Etudiant.AcceuilEtudiant;
-import Agent.AcceuilAgent;
 import javax.swing.JPasswordField;
 
 public class Login extends JFrame {
@@ -102,13 +101,7 @@ public class Login extends JFrame {
 					ath=1;
 					break;
 				}
-				else if(txtEnterVotreAdresse.getText().equals(Main.auth[i].login) && txtEntrerVotreMot.getText().equals(Main.auth[i].password) && Main.auth[i].role.equals("agent")) {
-					AcceuilAgent ac =new AcceuilAgent();
-					ac.setVisible(true);
-					dispose(); //setVisible(false);
-					ath=1;
-					break;
-				}else if(txtEnterVotreAdresse.getText().equals(Main.auth[i].login) && txtEntrerVotreMot.getText().equals(Main.auth[i].password) && Main.auth[i].role.equals("etudiant")) {
+				else if(txtEnterVotreAdresse.getText().equals(Main.auth[i].login) && txtEntrerVotreMot.getText().equals(Main.auth[i].password) && Main.auth[i].role.equals("etudiant")) {
 					AcceuilEtudiant ac =new AcceuilEtudiant();
 					ac.setVisible(true);
 					dispose(); //setVisible(false);

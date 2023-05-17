@@ -33,34 +33,31 @@ import projetPFA.Login;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
-public class ConsulterAgent extends JFrame {
+public class ConsulterMatiere extends JFrame {
 	private JPanel contentPane;
 	private JTable table;
-    public static String[][] tabAgent = new String[100][7];
-	public static int n_Age=0;
+    public static String[][] tabMatiere= new String[100][3];
+	public static int n_matiere=0;
 	public static String varId="";
 	
-	public static void getAgents() {
-		n_Age=0;
+	public static void getMatieres() {
+		n_matiere=0;
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://localhost/scolarite","root","");
 			Statement st =con.createStatement();
-			ResultSet resEtud = st.executeQuery("select * from agent");
+			ResultSet resEtud = st.executeQuery("select * from matiere");
 
 			int j=0;
 		
 			while(resEtud.next()) {
-				tabAgent[j][0] = resEtud.getString(1);
-				tabAgent[j][1] = resEtud.getString(2);
-				tabAgent[j][2] = resEtud.getString(3);
-				tabAgent[j][3] = resEtud.getString(4);
-				tabAgent[j][4] = resEtud.getString(5);
-				tabAgent[j][5] = resEtud.getString(6);
-				tabAgent[j][6] = resEtud.getString(7);
+				tabMatiere[j][0] = resEtud.getString(1);
+				tabMatiere[j][1] = resEtud.getString(2);
+				tabMatiere[j][2] = resEtud.getString(3);
+
 				
 				j++;
-				n_Age++;
+				n_matiere++;
 			}
 			
 		}catch(Exception e) {
@@ -68,19 +65,19 @@ public class ConsulterAgent extends JFrame {
 		}
 	}
 	
-	public static void DeleteAgent(){
+	public static void DeleteMatiere(){
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://localhost/scolarite","root","");
 			Statement st =con.createStatement();
-			String query = "DELETE FROM agent WHERE id = "+varId;
+			String query = "DELETE FROM matiere WHERE IDMATIERE = "+varId;
 			st.executeUpdate(query);
-			for (int i = 0; i < tabAgent.length; i++) {
-			    for (int j = 0; j < 7; j++) {
-			    	tabAgent[i][j] = null;
+			for (int i = 0; i < tabMatiere.length; i++) {
+			    for (int j = 0; j < 3; j++) {
+			    	tabMatiere[i][j] = null;
 			    }
 			}
-			getAgents();
+			getMatieres();
 			
 		} catch (ClassNotFoundException e1) {
 			e1.printStackTrace();
@@ -88,7 +85,7 @@ public class ConsulterAgent extends JFrame {
 			e1.printStackTrace();
 		}
 	}	
-	public ConsulterAgent() {
+	public ConsulterMatiere() {
 		getContentPane().setForeground(new Color(192, 192, 192));
 		this.setTitle("Gestion de Scolarite PI");
 		setResizable(false);
@@ -111,8 +108,8 @@ public class ConsulterAgent extends JFrame {
 		txtpnWelcomeAdmin.setForeground(new Color(255, 255, 255));
 		txtpnWelcomeAdmin.setBackground(new Color(227, 0, 0));
 		txtpnWelcomeAdmin.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 24));
-		txtpnWelcomeAdmin.setText("Liste des Agents");
-		txtpnWelcomeAdmin.setBounds(540, 7, 206, 40);
+		txtpnWelcomeAdmin.setText("Liste des Matieres");
+		txtpnWelcomeAdmin.setBounds(499, 7, 288, 40);
 		panel.add(txtpnWelcomeAdmin);
 		
 		JButton consultAgentBtn = new JButton("HOME");
@@ -134,39 +131,36 @@ public class ConsulterAgent extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				int selectedRow = table.getSelectedRow();
 	            if (selectedRow != -1) {
-	                String VID = table.getValueAt(selectedRow, 0).toString();
+	                String VIDMATIERE = table.getValueAt(selectedRow, 0).toString();
 	                String VNOM = table.getValueAt(selectedRow, 1).toString();
-	                String VPRENOM = table.getValueAt(selectedRow, 2).toString();
-	                String VLOGIN = table.getValueAt(selectedRow, 3).toString();
-	                String VPASSWORD = table.getValueAt(selectedRow, 4).toString();
-	                String VCNSS = table.getValueAt(selectedRow, 5).toString();
-	                String VDATE = table.getValueAt(selectedRow, 6).toString();
-	            
+	                String VCOEFF = table.getValueAt(selectedRow, 2).toString();
+
+	             
 	                try {
 						Class.forName("com.mysql.jdbc.Driver");
 						Connection con = DriverManager.getConnection("jdbc:mysql://localhost/scolarite","root","");
 						Statement st =con.createStatement();
-						if(VID == null) {
-							   String query = "INSERT INTO agent(ID, NOM, PRENOM, LOGIN, PASSWORD, CNSS, HIREDATE) VALUES ('"+VID+"', '"+VNOM+"', '"+VPRENOM+"', '"+VLOGIN+"', '"+VPASSWORD+"', '"+VCNSS+"', '"+VDATE+"')";
+						if(VIDMATIERE == null) {
+							   String query = "INSERT INTO matiere(IDMATIERE, NOM, COEFFICIENT) VALUES ('"+VIDMATIERE+"', '"+VNOM+"', '"+VCOEFF+"')";
 								st.executeUpdate(query);
-								for (int i = 0; i < tabAgent.length; i++) {
-								    for (int j = 0; j < 7; j++) {
-								    	tabAgent[i][j] = null;
+								for (int i = 0; i < tabMatiere.length; i++) {
+								    for (int j = 0; j < 3; j++) {
+								    	tabMatiere[i][j] = null;
 								    }
 								}
-								getAgents();
+								getMatieres();
 								table.revalidate();
 				                table.repaint();
 						}else {
-							DeleteAgent();
-							 String query = "INSERT INTO agent(ID, NOM, PRENOM, LOGIN, PASSWORD, CNSS, HIREDATE) VALUES "+ "('"+VID+"', '"+VNOM+"', '"+VPRENOM+"', '"+VLOGIN+"', '"+VPASSWORD+"', '"+VCNSS+"', '"+VDATE+"')";
+							DeleteMatiere();
+							   String query = "INSERT INTO matiere(IDMATIERE, NOM, COEFFICIENT) VALUES ('"+VIDMATIERE+"', '"+VNOM+"', '"+VCOEFF+"')";
 								st.executeUpdate(query);
-								for (int i = 0; i < tabAgent.length; i++) {
-								    for (int j = 0; j < 7; j++) {
-								    	tabAgent[i][j] = null; 
+								for (int i = 0; i < tabMatiere.length; i++) {
+								    for (int j = 0; j < 3; j++) {
+								    	tabMatiere[i][j] = null; 
 								    }
 								}
-								getAgents();
+								getMatieres();
 							table.revalidate();
 				            table.repaint();
 						}
@@ -187,16 +181,14 @@ public class ConsulterAgent extends JFrame {
 		applyBtn.setBounds(878, 505, 212, 66);
 		getContentPane().add(applyBtn);
 		
-		getAgents();
+		getMatieres();
 		
-		String[] columnNames = { "ID", "Nom", "Prenom", "Login", "Password","CNSS","DATE" };
+		String[] columnNames = { "ID Matiere", "Nom Matiere", "Coefficient" };
 		
-		table = new JTable(tabAgent,columnNames);
+		table = new JTable(tabMatiere,columnNames);
 		table.setSurrendersFocusOnKeystroke(true);
 		table.setBounds(137, 96, 901, 380);
-
 		JScrollPane scrollPane = new JScrollPane(table); 
-
 		scrollPane.setBounds(137, 96, 901, 380);
 		getContentPane().add(scrollPane);
 		
@@ -208,6 +200,7 @@ public class ConsulterAgent extends JFrame {
 		            if (selectedRow != -1) {
 		                Object value = table.getValueAt(selectedRow, 0);
 		                varId=(String) value;
+		                System.out.print(varId);
 		            }
 		        }
 		    }
@@ -217,7 +210,7 @@ public class ConsulterAgent extends JFrame {
 		JButton deletedBtn = new JButton("Delete");
 		deletedBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				DeleteAgent();
+				DeleteMatiere();
 				table.revalidate();
 	            table.repaint();
 			}
@@ -256,3 +249,4 @@ public class ConsulterAgent extends JFrame {
 		
 	}
 }
+

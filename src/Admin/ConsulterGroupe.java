@@ -33,36 +33,29 @@ import projetPFA.Login;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
-public class ConsulteEtudiant extends JFrame {
+public class ConsulterGroupe extends JFrame {
 	private JPanel contentPane;
 	private JTable table;
-    public static String[][] tabEtudiant = new String[100][8];
-	public static int n_etd=0;
+    public static String[][] tabGroupe= new String[100][2];
+	public static int n_groupe=0;
 	public static String varId="";
 	
-	public static void getEtudiants() {
-		n_etd=0;
+	public static void getGroupes() {
+		n_groupe=0;
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://localhost/scolarite","root","");
 			Statement st =con.createStatement();
-			ResultSet resEtud = st.executeQuery("select * from etudiant");
+			ResultSet resEtud = st.executeQuery("select * from groupe");
 
 			int j=0;
 		
 			while(resEtud.next()) {
-				tabEtudiant[j][0] = resEtud.getString(1);
-				tabEtudiant[j][1] = resEtud.getString(2);
-				tabEtudiant[j][2] = resEtud.getString(3);
-				tabEtudiant[j][3] = resEtud.getString(4);
-				tabEtudiant[j][4] = resEtud.getString(5);
-				tabEtudiant[j][5] = resEtud.getString(6);
-				tabEtudiant[j][6] = resEtud.getString(7);
-				tabEtudiant[j][7] = resEtud.getString(8);
-
+				tabGroupe[j][0] = resEtud.getString(1);
+				tabGroupe[j][1] = resEtud.getString(2);
 				
 				j++;
-				n_etd++;
+				n_groupe++;
 			}
 			
 		}catch(Exception e) {
@@ -70,19 +63,19 @@ public class ConsulteEtudiant extends JFrame {
 		}
 	}
 	
-	public static void DeleteEtudiant(){
+	public static void DeleteGroupe(){
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://localhost/scolarite","root","");
 			Statement st =con.createStatement();
-			String query = "DELETE FROM Etudiant WHERE id = "+varId;
+			String query = "DELETE FROM groupe WHERE IDGroupe = "+varId;
 			st.executeUpdate(query);
-			for (int i = 0; i < tabEtudiant.length; i++) {
-			    for (int j = 0; j < 8; j++) {
-			        tabEtudiant[i][j] = null;
+			for (int i = 0; i < tabGroupe.length; i++) {
+			    for (int j = 0; j < 2; j++) {
+			    	tabGroupe[i][j] = null;
 			    }
 			}
-			getEtudiants();
+			getGroupes();
 			
 		} catch (ClassNotFoundException e1) {
 			e1.printStackTrace();
@@ -90,7 +83,7 @@ public class ConsulteEtudiant extends JFrame {
 			e1.printStackTrace();
 		}
 	}	
-	public ConsulteEtudiant() {
+	public ConsulterGroupe() {
 		getContentPane().setForeground(new Color(192, 192, 192));
 		this.setTitle("Gestion de Scolarite PI");
 		setResizable(false);
@@ -113,7 +106,7 @@ public class ConsulteEtudiant extends JFrame {
 		txtpnWelcomeAdmin.setForeground(new Color(255, 255, 255));
 		txtpnWelcomeAdmin.setBackground(new Color(227, 0, 0));
 		txtpnWelcomeAdmin.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 24));
-		txtpnWelcomeAdmin.setText("Liste des Etudiants");
+		txtpnWelcomeAdmin.setText("Liste des Groupes");
 		txtpnWelcomeAdmin.setBounds(499, 7, 288, 40);
 		panel.add(txtpnWelcomeAdmin);
 		
@@ -136,41 +129,35 @@ public class ConsulteEtudiant extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				int selectedRow = table.getSelectedRow();
 	            if (selectedRow != -1) {
-	                String VID = table.getValueAt(selectedRow, 0).toString();
+	                String VIDGROUPE = table.getValueAt(selectedRow, 0).toString();
 	                String VNOM = table.getValueAt(selectedRow, 1).toString();
-	                String VPRENOM = table.getValueAt(selectedRow, 2).toString();
-	                String VNIVEAU = table.getValueAt(selectedRow, 3).toString();
-	                String VLOGIN = table.getValueAt(selectedRow, 4).toString();
-	                String VPASSWORD = table.getValueAt(selectedRow, 5).toString();
-	                String VCIN = table.getValueAt(selectedRow, 6).toString();
-	                String IDGROUPE = table.getValueAt(selectedRow, 7).toString();
 
 	             
 	                try {
 						Class.forName("com.mysql.jdbc.Driver");
 						Connection con = DriverManager.getConnection("jdbc:mysql://localhost/scolarite","root","");
 						Statement st =con.createStatement();
-						if(VID == null) {
-							   String query = "INSERT INTO etudiant(ID, NOM, PRENOM, NIVEAU, LOGIN, PASSWORD, CIN,IDGROUPE) VALUES ('"+VID+"', '"+VNOM+"', '"+VPRENOM+"', '"+VNIVEAU+"', '"+VLOGIN+"', '"+VPASSWORD+"', '"+VCIN+"', '"+IDGROUPE+"')";
+						if(VIDGROUPE == null) {
+							   String query = "INSERT INTO groupe(IDGroupe, NOM) VALUES ('"+VIDGROUPE+"', '"+VNOM+"')";
 								st.executeUpdate(query);
-								for (int i = 0; i < tabEtudiant.length; i++) {
-								    for (int j = 0; j < 8; j++) {
-								        tabEtudiant[i][j] = null;
+								for (int i = 0; i < tabGroupe.length; i++) {
+								    for (int j = 0; j < 2; j++) {
+								    	tabGroupe[i][j] = null;
 								    }
 								}
-								getEtudiants();
+								getGroupes();
 								table.revalidate();
 				                table.repaint();
 						}else {
-							DeleteEtudiant();
-							   String query = "INSERT INTO etudiant(ID, NOM, PRENOM, NIVEAU, LOGIN, PASSWORD, CIN,IDGROUPE) VALUES ('"+VID+"', '"+VNOM+"', '"+VPRENOM+"', '"+VNIVEAU+"', '"+VLOGIN+"', '"+VPASSWORD+"', '"+VCIN+"', '"+IDGROUPE+"')";
+							DeleteGroupe();
+							   String query = "INSERT INTO groupe(IDGroupe, NOM) VALUES ('"+VIDGROUPE+"', '"+VNOM+"')";
 								st.executeUpdate(query);
-								for (int i = 0; i < tabEtudiant.length; i++) {
-								    for (int j = 0; j < 8; j++) {
-								        tabEtudiant[i][j] = null; 
+								for (int i = 0; i < tabGroupe.length; i++) {
+								    for (int j = 0; j < 2; j++) {
+								    	tabGroupe[i][j] = null; 
 								    }
 								}
-							getEtudiants();
+								getGroupes();
 							table.revalidate();
 				            table.repaint();
 						}
@@ -191,11 +178,11 @@ public class ConsulteEtudiant extends JFrame {
 		applyBtn.setBounds(878, 505, 212, 66);
 		getContentPane().add(applyBtn);
 		
-		getEtudiants();
+		getGroupes();
 		
-		String[] columnNames = { "ID", "Nom", "Prenom", "CIN", "Login","Password","Niveau","ID Groupe" };
+		String[] columnNames = { "ID Groupe", "Nom Groupe" };
 		
-		table = new JTable(tabEtudiant,columnNames);
+		table = new JTable(tabGroupe,columnNames);
 		table.setSurrendersFocusOnKeystroke(true);
 		table.setBounds(137, 96, 901, 380);
 		JScrollPane scrollPane = new JScrollPane(table); 
@@ -210,6 +197,7 @@ public class ConsulteEtudiant extends JFrame {
 		            if (selectedRow != -1) {
 		                Object value = table.getValueAt(selectedRow, 0);
 		                varId=(String) value;
+		                System.out.print(varId);
 		            }
 		        }
 		    }
@@ -219,7 +207,7 @@ public class ConsulteEtudiant extends JFrame {
 		JButton deletedBtn = new JButton("Delete");
 		deletedBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				DeleteEtudiant();
+				DeleteGroupe();
 				table.revalidate();
 	            table.repaint();
 			}
@@ -258,3 +246,4 @@ public class ConsulteEtudiant extends JFrame {
 		
 	}
 }
+
