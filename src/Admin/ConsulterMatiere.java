@@ -30,6 +30,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 import projetPFA.Login;
+import projetPFA.Main;
+
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
@@ -140,7 +142,7 @@ public class ConsulterMatiere extends JFrame {
 						Class.forName("com.mysql.jdbc.Driver");
 						Connection con = DriverManager.getConnection("jdbc:mysql://localhost/scolarite","root","");
 						Statement st =con.createStatement();
-						if(VIDMATIERE == null) {
+						if(selectedRow >=n_matiere) {
 							   String query = "INSERT INTO matiere(IDMATIERE, NOM, COEFFICIENT) VALUES ('"+VIDMATIERE+"', '"+VNOM+"', '"+VCOEFF+"')";
 								st.executeUpdate(query);
 								for (int i = 0; i < tabMatiere.length; i++) {
@@ -151,9 +153,9 @@ public class ConsulterMatiere extends JFrame {
 								getMatieres();
 								table.revalidate();
 				                table.repaint();
+				                Main.GetAuth();
 						}else {
-							DeleteMatiere();
-							   String query = "INSERT INTO matiere(IDMATIERE, NOM, COEFFICIENT) VALUES ('"+VIDMATIERE+"', '"+VNOM+"', '"+VCOEFF+"')";
+								String query ="UPDATE `matiere` SET `IDMATIERE`='"+VIDMATIERE+"',`NOM`='"+VNOM+"',`COEFFICIENT`='"+VCOEFF+"' WHERE `IDMATIERE`='"+varId+"'";
 								st.executeUpdate(query);
 								for (int i = 0; i < tabMatiere.length; i++) {
 								    for (int j = 0; j < 3; j++) {
@@ -163,6 +165,7 @@ public class ConsulterMatiere extends JFrame {
 								getMatieres();
 							table.revalidate();
 				            table.repaint();
+				            Main.GetAuth();
 						}
 		             
 						

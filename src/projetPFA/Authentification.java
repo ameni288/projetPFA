@@ -1,11 +1,13 @@
 package projetPFA;
 
 public class Authentification {
-	String login = "";
-	String password = "";
-	String role = "";
+	public String id = "";
+	public String login = "";
+	public String password = "";
+	public String role = "";
 	
-	Authentification(String log,String pass,String role){
+	Authentification(String id,String log,String pass,String role){
+		this.id=id;
 		this.login=log;
 		this.password=pass;
 		this.role=role;

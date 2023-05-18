@@ -3,19 +3,14 @@ import java.sql.*;
 
 public class Main {
 	
-	public static String[] tabLogin = new String[20];
-	public static String[] tabPass = new String[20];
-	public static String[] tabRole = new String[20];
+	
 	public static int n=0;
 	public static Authentification[] auth = new Authentification[100];
 	
-	public static void main(String[] args) {
+	public static void GetAuth()
+	{
 		int i=0;
-		
-		Login l =new Login();
-		
-		//auth[0]=new Authentification("choko","1234","admin");
-		
+		n=0;
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://localhost/scolarite","root","");
@@ -24,12 +19,12 @@ public class Main {
 		
 		
 			while(res.next()) {
-				auth[i]=new Authentification(res.getString(1) , res.getString(2),"admin");
+				auth[i]=new Authentification(res.getString(1),res.getString(2) , res.getString(3),"admin");
 				i++;
 				n++;
 			}
 		}catch(Exception e) {
-			System.out.print(e.getMessage());
+			//System.out.print(e.getMessage());
 		}
 		
 		try {
@@ -40,7 +35,7 @@ public class Main {
 		
 		
 			while(res.next()) {
-				auth[i]=new Authentification(res.getString(4) , res.getString(5),"professeur");
+				auth[i]=new Authentification(res.getString(1),res.getString(4) , res.getString(5),"professeur");
 				i++;
 				n++;
 			}
@@ -58,7 +53,7 @@ public class Main {
 		
 		
 			while(res.next()) {
-				auth[i]=new Authentification(res.getString(5) , res.getString(6),"agent");
+				auth[i]=new Authentification(res.getString(1),res.getString(5) , res.getString(6),"etudiant");
 				i++;
 				n++;
 			}
@@ -67,10 +62,16 @@ public class Main {
 		}
 		
 		
-		/*for (int j=0;j<auth.length;j++) {
-			System.out.println(auth[j].login);
-			
-		}*/
+	}
+	
+	public static void main(String[] args) {
+		
+		
+		Login l =new Login();
+		
+		GetAuth();
+		
+
 	}
 
 }

@@ -30,6 +30,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 import projetPFA.Login;
+import projetPFA.Main;
+
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
@@ -150,7 +152,7 @@ public class ConsulteProf extends JFrame {
 						Class.forName("com.mysql.jdbc.Driver");
 						Connection con = DriverManager.getConnection("jdbc:mysql://localhost/scolarite","root","");
 						Statement st =con.createStatement();
-						if(VID == null) {
+						if(selectedRow>=n_prof) {
 							String query = "INSERT INTO professeur(`ID`, `NOM`, `PRENOM`, `LOGIN`, `PASSWORD`, `CNSS`, `HIREDATE`, `IDMATIERE`) VALUES ('" + VID + "', '" + VNOM + "', '" + VPRENOM + "', '" + VLOGIN + "', '" + VPASSWORD + "', '" + VCNSS + "', '" + VHIREDATE + "', '" + IDMATIERE + "')";
 								st.executeUpdate(query);
 								for (int i = 0; i < tabProfs.length; i++) {
@@ -161,9 +163,9 @@ public class ConsulteProf extends JFrame {
 								getProfs();
 								table.revalidate();
 				                table.repaint();
+				            	Main.GetAuth();
 						}else {
-							DeleteProf();
-							String query = "INSERT INTO professeur(`ID`, `NOM`, `PRENOM`, `LOGIN`, `PASSWORD`, `CNSS`, `HIREDATE`, `IDMATIERE`) VALUES ('" + VID + "', '" + VNOM + "', '" + VPRENOM + "', '" + VLOGIN + "', '" + VPASSWORD + "', '" + VCNSS + "', '" + VHIREDATE + "', '" + IDMATIERE + "')";
+							String query ="UPDATE `professeur` SET `ID`='"+VID+"',`NOM`='"+VNOM+"',`PRENOM`='"+VPRENOM+"',`LOGIN`='"+VLOGIN+"',`PASSWORD`='"+VPASSWORD+"',`CNSS`='"+VCNSS+"',`HIREDATE`='"+VHIREDATE+"',`IDMATIERE`='"+IDMATIERE+"' WHERE `ID`='"+varId+"'";
 								st.executeUpdate(query);
 								for (int i = 0; i < tabProfs.length; i++) {
 								    for (int j = 0; j < 8; j++) {
@@ -173,6 +175,7 @@ public class ConsulteProf extends JFrame {
 								getProfs();
 							table.revalidate();
 				            table.repaint();
+				        	Main.GetAuth();
 						}
 		             
 						

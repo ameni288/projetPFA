@@ -131,13 +131,14 @@ public class ConsulterGroupe extends JFrame {
 	            if (selectedRow != -1) {
 	                String VIDGROUPE = table.getValueAt(selectedRow, 0).toString();
 	                String VNOM = table.getValueAt(selectedRow, 1).toString();
-
+	                
+	                int selectedRowIndex = table.getSelectedRow();
 	             
 	                try {
 						Class.forName("com.mysql.jdbc.Driver");
 						Connection con = DriverManager.getConnection("jdbc:mysql://localhost/scolarite","root","");
 						Statement st =con.createStatement();
-						if(VIDGROUPE == null) {
+						if(selectedRowIndex >= n_groupe) {
 							   String query = "INSERT INTO groupe(IDGroupe, NOM) VALUES ('"+VIDGROUPE+"', '"+VNOM+"')";
 								st.executeUpdate(query);
 								for (int i = 0; i < tabGroupe.length; i++) {
@@ -149,8 +150,10 @@ public class ConsulterGroupe extends JFrame {
 								table.revalidate();
 				                table.repaint();
 						}else {
-							DeleteGroupe();
-							   String query = "INSERT INTO groupe(IDGroupe, NOM) VALUES ('"+VIDGROUPE+"', '"+VNOM+"')";
+							//	DeleteGroupe();
+							//   String query = "INSERT INTO groupe(IDGroupe, NOM) VALUES ('"+VIDGROUPE+"', '"+VNOM+"')";
+							String query ="UPDATE `groupe` SET `IDGroupe`='"+VIDGROUPE+"',`NOM`='"+VNOM+"' WHERE `IDGroupe`='"+varId+"'";
+
 								st.executeUpdate(query);
 								for (int i = 0; i < tabGroupe.length; i++) {
 								    for (int j = 0; j < 2; j++) {
@@ -174,7 +177,7 @@ public class ConsulterGroupe extends JFrame {
 		});
 	
 		applyBtn.setBorder(new LineBorder(new Color(128, 128, 128)));
-		applyBtn.setBackground(new Color(128, 128, 128));
+		applyBtn.setBackground(new Color(128, 128, 128));	
 		applyBtn.setBounds(878, 505, 212, 66);
 		getContentPane().add(applyBtn);
 		
@@ -198,6 +201,7 @@ public class ConsulterGroupe extends JFrame {
 		                Object value = table.getValueAt(selectedRow, 0);
 		                varId=(String) value;
 		                System.out.print(varId);
+		                
 		            }
 		        }
 		    }

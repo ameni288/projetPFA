@@ -1,6 +1,5 @@
 package projetPFA;
 
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -22,6 +21,7 @@ import Etudiant.AcceuilEtudiant;
 import javax.swing.JPasswordField;
 
 public class Login extends JFrame {
+	public static int index;
 	private JTextField txtEnterVotreAdresse;
 	private JTextField txtEntrerVotreMot;
 	private JPasswordField passwordField;
@@ -85,12 +85,14 @@ public class Login extends JFrame {
 	btnNewButton.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 			int ath=0;
-			for(int i=0;i<Main.auth.length;i++) {
+			
+			for(int i=0;i<Main.n;i++) {
 				if(txtEnterVotreAdresse.getText().equals(Main.auth[i].login) && txtEntrerVotreMot.getText().equals(Main.auth[i].password) && Main.auth[i].role.equals("admin")) {
 					AcceuilAdmin ac =new AcceuilAdmin();
 					ac.setVisible(true);
 					dispose(); //setVisible(false);
 					ath=1;
+					index=i;
 					break;
 				}
 				
@@ -99,6 +101,7 @@ public class Login extends JFrame {
 					ac.setVisible(true);
 					dispose(); //setVisible(false);
 					ath=1;
+					index=i;
 					break;
 				}
 				else if(txtEnterVotreAdresse.getText().equals(Main.auth[i].login) && txtEntrerVotreMot.getText().equals(Main.auth[i].password) && Main.auth[i].role.equals("etudiant")) {
@@ -106,6 +109,7 @@ public class Login extends JFrame {
 					ac.setVisible(true);
 					dispose(); //setVisible(false);
 					ath=1;
+					index=i;
 					break;
 				}
 			}

@@ -30,6 +30,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 import projetPFA.Login;
+import projetPFA.Main;
+
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
@@ -59,8 +61,6 @@ public class ConsulteEtudiant extends JFrame {
 				tabEtudiant[j][5] = resEtud.getString(6);
 				tabEtudiant[j][6] = resEtud.getString(7);
 				tabEtudiant[j][7] = resEtud.getString(8);
-
-				
 				j++;
 				n_etd++;
 			}
@@ -144,27 +144,33 @@ public class ConsulteEtudiant extends JFrame {
 	                String VPASSWORD = table.getValueAt(selectedRow, 5).toString();
 	                String VCIN = table.getValueAt(selectedRow, 6).toString();
 	                String IDGROUPE = table.getValueAt(selectedRow, 7).toString();
-
-	             
+	              
+	               // int selectedRowIndex = table.getSelectedRow();
+	               // System.out.println("ligne selected "+selectedRowIndex+" nbr etd : "+n_etd);
+	                
 	                try {
 						Class.forName("com.mysql.jdbc.Driver");
 						Connection con = DriverManager.getConnection("jdbc:mysql://localhost/scolarite","root","");
 						Statement st =con.createStatement();
-						if(VID == null) {
+						if(selectedRow>=n_etd) {
 							   String query = "INSERT INTO etudiant(ID, NOM, PRENOM, NIVEAU, LOGIN, PASSWORD, CIN,IDGROUPE) VALUES ('"+VID+"', '"+VNOM+"', '"+VPRENOM+"', '"+VNIVEAU+"', '"+VLOGIN+"', '"+VPASSWORD+"', '"+VCIN+"', '"+IDGROUPE+"')";
 								st.executeUpdate(query);
+								
 								for (int i = 0; i < tabEtudiant.length; i++) {
 								    for (int j = 0; j < 8; j++) {
 								        tabEtudiant[i][j] = null;
 								    }
 								}
+							
 								getEtudiants();
 								table.revalidate();
 				                table.repaint();
+								Main.GetAuth();
 						}else {
-							DeleteEtudiant();
-							   String query = "INSERT INTO etudiant(ID, NOM, PRENOM, NIVEAU, LOGIN, PASSWORD, CIN,IDGROUPE) VALUES ('"+VID+"', '"+VNOM+"', '"+VPRENOM+"', '"+VNIVEAU+"', '"+VLOGIN+"', '"+VPASSWORD+"', '"+VCIN+"', '"+IDGROUPE+"')";
-								st.executeUpdate(query);
+								//DeleteEtudiant();
+							    // String query = "INSERT INTO etudiant(ID, NOM, PRENOM, NIVEAU, LOGIN, PASSWORD, CIN,IDGROUPE) VALUES ('"+VID+"', '"+VNOM+"', '"+VPRENOM+"', '"+VNIVEAU+"', '"+VLOGIN+"', '"+VPASSWORD+"', '"+VCIN+"', '"+IDGROUPE+"')";
+								String query ="UPDATE `etudiant` SET `ID`='"+VID+"',`NOM`='"+VNOM+"',`PRENOM`='"+VPRENOM+"',`NIVEAU`='"+VNIVEAU+"',`LOGIN`='"+VLOGIN+"',`PASSWORD`='"+VPASSWORD+"',`CIN`='"+VCIN+"',`IDGROUPE`='"+IDGROUPE+"' WHERE `ID`='"+varId+"'";
+							    st.executeUpdate(query);
 								for (int i = 0; i < tabEtudiant.length; i++) {
 								    for (int j = 0; j < 8; j++) {
 								        tabEtudiant[i][j] = null; 
@@ -173,6 +179,8 @@ public class ConsulteEtudiant extends JFrame {
 							getEtudiants();
 							table.revalidate();
 				            table.repaint();
+							Main.GetAuth();
+
 						}
 		             
 						
@@ -180,6 +188,15 @@ public class ConsulteEtudiant extends JFrame {
 						e1.printStackTrace();
 					} catch (SQLException e1) {
 						e1.printStackTrace();
+						for (int i = 0; i < tabEtudiant.length; i++) {
+						    for (int j = 0; j < 8; j++) {
+						        tabEtudiant[i][j] = null;
+						    }
+						}
+						getEtudiants();
+						table.revalidate();
+		                table.repaint();
+				
 					}
 	            }
 				
@@ -191,8 +208,13 @@ public class ConsulteEtudiant extends JFrame {
 		applyBtn.setBounds(878, 505, 212, 66);
 		getContentPane().add(applyBtn);
 		
+		for (int i = 0; i < tabEtudiant.length; i++) {
+		    for (int j = 0; j < 8; j++) {
+		        tabEtudiant[i][j] = null; 
+		    }
+		}
 		getEtudiants();
-		
+        
 		String[] columnNames = { "ID", "Nom", "Prenom", "CIN", "Login","Password","Niveau","ID Groupe" };
 		
 		table = new JTable(tabEtudiant,columnNames);

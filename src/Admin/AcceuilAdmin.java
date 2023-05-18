@@ -55,7 +55,7 @@ public class AcceuilAdmin extends JFrame {
 		consultEtdBtn.setPreferredSize(new Dimension(161, 21));
 		consultEtdBtn.setBorder(new LineBorder(new Color(128, 128, 128)));
 		consultEtdBtn.setBackground(new Color(128, 128, 128));
-		consultEtdBtn.setBounds(577, 306, 223, 68);
+		consultEtdBtn.setBounds(108, 100, 223, 68);
 		getContentPane().add(consultEtdBtn);
 		
 		consultEtdBtn.addActionListener(new ActionListener() {
@@ -79,7 +79,7 @@ public class AcceuilAdmin extends JFrame {
 	
 		consultProfBtn.setBorder(new LineBorder(new Color(128, 128, 128)));
 		consultProfBtn.setBackground(new Color(128, 128, 128));
-		consultProfBtn.setBounds(920, 307, 212, 66);
+		consultProfBtn.setBounds(108, 188, 223, 66);
 		getContentPane().add(consultProfBtn);
 		
 		JButton consultEtdBtn_1 = new JButton("Consulter Groupe");
@@ -93,7 +93,7 @@ public class AcceuilAdmin extends JFrame {
 		consultEtdBtn_1.setPreferredSize(new Dimension(161, 21));
 		consultEtdBtn_1.setBorder(new LineBorder(new Color(128, 128, 128)));
 		consultEtdBtn_1.setBackground(Color.GRAY);
-		consultEtdBtn_1.setBounds(246, 306, 223, 68);
+		consultEtdBtn_1.setBounds(108, 273, 223, 68);
 		getContentPane().add(consultEtdBtn_1);
 		
 		JButton consultEtdBtn_2 = new JButton("Consulter Matiere");
@@ -107,7 +107,7 @@ public class AcceuilAdmin extends JFrame {
 		consultEtdBtn_2.setPreferredSize(new Dimension(161, 21));
 		consultEtdBtn_2.setBorder(new LineBorder(new Color(128, 128, 128)));
 		consultEtdBtn_2.setBackground(Color.GRAY);
-		consultEtdBtn_2.setBounds(546, 189, 223, 68);
+		consultEtdBtn_2.setBounds(108, 365, 223, 68);
 		getContentPane().add(consultEtdBtn_2);
 		
 
