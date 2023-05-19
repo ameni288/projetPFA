@@ -52,44 +52,20 @@ public class AcceuilProfesseur extends JFrame {
 		txtpnWelcomeAdmin.setBounds(483, 7, 320, 40);
 		panel.add(txtpnWelcomeAdmin);
 		
-		JButton consultAgentBtn = new JButton("Consulter Agent de Scolarité");
-		consultAgentBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			
-				
-			}
-		});
-		consultAgentBtn.setBorder(new LineBorder(new Color(128, 128, 128)));
-		consultAgentBtn.setBackground(new Color(128, 128, 128));
-		consultAgentBtn.setBounds(157, 307, 232, 78);
-		getContentPane().add(consultAgentBtn);
-		
-		JButton consultEtdBtn = new JButton("Consulter Etudiant");
+		JButton consultEtdBtn = new JButton("Choisir Groupe");
 		consultEtdBtn.setPreferredSize(new Dimension(161, 21));
 		consultEtdBtn.setBorder(new LineBorder(new Color(128, 128, 128)));
 		consultEtdBtn.setBackground(new Color(128, 128, 128));
-		consultEtdBtn.setBounds(543, 307, 223, 68);
+		consultEtdBtn.setBounds(531, 307, 223, 68);
 		getContentPane().add(consultEtdBtn);
 		
 		consultEtdBtn.addActionListener(new ActionListener() {
     		public void actionPerformed(ActionEvent e) {
-    			
+    			ChoisirGroupe l =new ChoisirGroupe();
+				l.setVisible(true);
+				dispose(); //setVisible(false);
     		}
     	});
-		
-		
-		JButton consultProfBtn = new JButton("Consulter Professeur");
-		consultProfBtn.setPreferredSize(new Dimension(161, 21));
-		consultProfBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-			}
-		});
-	
-		consultProfBtn.setBorder(new LineBorder(new Color(128, 128, 128)));
-		consultProfBtn.setBackground(new Color(128, 128, 128));
-		consultProfBtn.setBounds(920, 307, 212, 66);
-		getContentPane().add(consultProfBtn);
 		
 
         JMenuBar menuBar = new JMenuBar();

@@ -62,7 +62,7 @@ public class Login extends JFrame {
 	lblNewLabel_1.setBounds(594, 289, 97, 34);
 	getContentPane().add(lblNewLabel_1);
 	
-	txtEnterVotreAdresse = new JTextField("Ameni");
+	txtEnterVotreAdresse = new JTextField("p1");
 	txtEnterVotreAdresse.setBorder(new LineBorder(Color.DARK_GRAY));
 	txtEnterVotreAdresse.setForeground(new Color(0, 0, 0));
 	txtEnterVotreAdresse.setFont(new Font("Sitka Display", Font.PLAIN, 17));
@@ -71,7 +71,7 @@ public class Login extends JFrame {
 	txtEnterVotreAdresse.setColumns(10);
 	
 	
-	txtEntrerVotreMot = new JPasswordField("1234");
+	txtEntrerVotreMot = new JPasswordField("1111");
 	txtEntrerVotreMot.setBounds(448, 390, 389, 19);
 	this.setVisible(true);
 	txtEntrerVotreMot.setBorder(new LineBorder(Color.DARK_GRAY));
