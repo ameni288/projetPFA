@@ -38,7 +38,7 @@ import javax.swing.JTextField;
 public class GererNote extends JFrame {
 	private JPanel contentPane;
 	private JTable table;
-    public static String[][] tabEtudiant = new String[100][8];
+	public static String[][] tabEtudiant;
 	public static int n_etd=0;
 	public static String varNote="";
 	public static String varAbscence="";
@@ -49,24 +49,32 @@ public class GererNote extends JFrame {
 		n_etd=0;
 		String IDMATIERE="";
 		String NOMMATIERE="";
-		System.out.print(ChoisirGroupe.GroupChoisi);
+		int j=0;
+		
+		System.out.println(Login.index);
+		
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://localhost/scolarite","root","");
 			Statement st =con.createStatement();
-			String sql2 = "SELECT matiere.Nom, matiere.IDMATIERE FROM matiere JOIN professeur ON matiere.IDMATIERE = professeur.IDMATIERE WHERE professeur.id ="+Login.index;
+			String sql2 = "SELECT matiere.Nom, matiere.IDMATIERE FROM matiere JOIN professeur ON matiere.IDMATIERE = professeur.IDMATIERE WHERE professeur.id ="+Main.auth[Login.index].id;
 			ResultSet resMatiere = st.executeQuery(sql2);
 			
-			 while (resMatiere.next()) {
+			while (resMatiere.next()) {
 			    	NOMMATIERE = resMatiere.getString(1);
-			    	IDMATIERE = resMatiere.getString(2);
-
-			      
-			    }   
-			    
-			String query = "SELECT ID, NOM, PRENOM FROM etudiant WHERE IDGROUPE = (SELECT IDGROUPE FROM groupe WHERE NOM LIKE '" + ChoisirGroupe.GroupChoisi + "')";
+			    	IDMATIERE = resMatiere.getString(2);    
+			}   
+			 
+			String query = "SELECT etudiant.ID, etudiant.NOM, etudiant.PRENOM, evaluation.IDMATIERE, matiere.NOM, evaluation.NOTE_DS, evaluation.NOTE_EXAMEN, evaluation.ABSCENCE FROM etudiant LEFT JOIN evaluation ON etudiant.ID = evaluation.IDETUDIANT LEFT JOIN matiere ON matiere.IDMATIERE = evaluation.IDMATIERE WHERE IDGROUPE = (SELECT IDGROUPE FROM groupe WHERE Nom like '" + ChoisirGroupe.GroupChoisi + "')";
 			ResultSet resEtud = st.executeQuery(query);
-			int j=0;
+			
+			while(resEtud.next()) {
+				
+				n_etd++;
+			}
+		    tabEtudiant = new String[n_etd][8];
+			resEtud = st.executeQuery(query);
+
 		
 			while(resEtud.next()) {
 				tabEtudiant[j][0] = resEtud.getString(1);
@@ -74,10 +82,12 @@ public class GererNote extends JFrame {
 				tabEtudiant[j][2] = resEtud.getString(3);
 				tabEtudiant[j][3] = NOMMATIERE;
 				tabEtudiant[j][4] = IDMATIERE;
+				tabEtudiant[j][5] = resEtud.getString(6);
+				tabEtudiant[j][6] = resEtud.getString(7);
+				tabEtudiant[j][7] = resEtud.getString(8);
 				j++;
 				n_etd++;
 			}
-			
 		  
 			
 		}catch(Exception e) {
@@ -141,35 +151,25 @@ public class GererNote extends JFrame {
 	                String VTYPE = table.getValueAt(selectedRow, 6).toString();
 	                String VABSCENCE = table.getValueAt(selectedRow, 7).toString();
 	              
-	            //VNOTE==null && VTYPE==null && VABSCENCE==null
-	                System.out.println("ligne selected "+selectedRow+" nbr etd : "+n_etd);
-	                System.out.println(VNOTE);
+	                //VNOTE==null && VTYPE==null && VABSCENCE==null
+	               // System.out.println("ligne selected "+selectedRow+" nbr etd : "+n_etd);
+	                //System.out.println(VNOTE);
 	                try {
 						Class.forName("com.mysql.jdbc.Driver");
 						Connection con = DriverManager.getConnection("jdbc:mysql://localhost/scolarite","root","");
 						Statement st =con.createStatement();
 						if( varNote==null && varType==null && varAbscence==null) {
-							   String query = "INSERT INTO `evaluation`(`IDETUDIANT`, `IDPROF`, `IDMATIERE`, `NOTE`, `TYPE`, `ABSCENCE`) VALUES ('"+VIDETUDIANT+"', '"+Login.index+"', '"+VIDMATIERE+"', '"+VNOTE+"', '"+VTYPE+"', '"+VABSCENCE+"')";
+							   String query = "INSERT INTO `evaluation`(`IDETUDIANT`, `IDPROF`, `IDMATIERE`, `NOTE_DS`, `NOTE_Examen`, `ABSCENCE`) VALUES ('"+VIDETUDIANT+"', '"+Login.index+"', '"+VIDMATIERE+"', '"+VNOTE+"', '"+VTYPE+"', '"+VABSCENCE+"')";
 								st.executeUpdate(query);
-								
-								for (int i = 0; i < tabEtudiant.length; i++) {
-								    for (int j = 0; j < 8; j++) {
-								        tabEtudiant[i][j] = null;
-								    }
-								}
 							
 								getEtudiants();
 								table.revalidate();
 				                table.repaint();
 						}else {
 							
-							String query = "UPDATE `evaluation` SET `NOTE`='" + VNOTE + "', `TYPE`='" + VTYPE + "', `ABSCENCE`='" + VABSCENCE + "' WHERE `IDETUDIANT`='" + VIDETUDIANT + "' AND `IDPROF`='" + Login.index + "' AND `IDMATIERE`='" + VIDMATIERE + "'";
-							    st.executeUpdate(query);
-								for (int i = 0; i < tabEtudiant.length; i++) {
-								    for (int j = 0; j < 8; j++) {
-								        tabEtudiant[i][j] = null; 
-								    }
-								}
+							String query = "UPDATE `evaluation` SET `NOTE_DS`='" + VNOTE + "', `NOTE_EXAMen`='" + VTYPE + "', `ABSCENCE`='" + VABSCENCE + "' WHERE `IDETUDIANT`='" + VIDETUDIANT + "' AND `IDPROF`='" + Login.index + "' AND `IDMATIERE`='" + VIDMATIERE + "'";
+							st.executeUpdate(query);
+								
 							getEtudiants();
 							table.revalidate();
 				            table.repaint();
@@ -200,19 +200,21 @@ public class GererNote extends JFrame {
 		applyBtn.setBounds(878, 505, 212, 66);
 		getContentPane().add(applyBtn);
 		
-		for (int i = 0; i < tabEtudiant.length; i++) {
+		/*for (int i = 0; i < n_etd; i++) {
 		    for (int j = 0; j < 8; j++) {
 		        tabEtudiant[i][j] = null; 
 		    }
-		}
+		}*/
 		getEtudiants();
-		for(int i=0;i<n_etd;i++) {
-			System.out.println(tabEtudiant[i][1]+tabEtudiant[i][2]);
-		}
-        
-		String[] columnNames = { "ID Etudiant", "Nom", "Prenom", "Nom Matière", "ID Matière","Note","Type","Absence" };
 		
-		table = new JTable(tabEtudiant,columnNames);
+		
+		String[] columnNames = { "ID Etudiant", "Nom", "Prenom", "Nom Matière", "ID Matière","Note DS","Note Examen","Absence" };
+		
+		table = new JTable(tabEtudiant, columnNames) {
+		    public boolean isCellEditable(int row, int column) {
+		        return column >= 5;
+		    }
+		};
 		table.setSurrendersFocusOnKeystroke(true);
 		table.setBounds(137, 96, 901, 380);
 		JScrollPane scrollPane = new JScrollPane(table); 

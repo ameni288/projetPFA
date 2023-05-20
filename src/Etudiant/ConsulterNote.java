@@ -49,7 +49,7 @@ public class ConsulterNote extends JFrame {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://localhost/scolarite","root","");
 			Statement st =con.createStatement();
-			ResultSet resNote = st.executeQuery("select e.IDMATIERE,matiere.nom,note,type,abscence from evaluation e join matiere on e.idmatiere=matiere.idmatiere where idetudiant ="+Main.auth[Login.index].id);
+			ResultSet resNote = st.executeQuery("select e.IDMATIERE,matiere.nom,note_ds,note_examen,abscence from evaluation e join matiere on e.idmatiere=matiere.idmatiere where idetudiant ="+Main.auth[Login.index].id);
 
 			int j=0;
 		
@@ -112,7 +112,7 @@ public class ConsulterNote extends JFrame {
 	
 	
         getNotes();
-		String[] columnNames = { "ID Matiere", "Nom Matiere", "Note", "Type","Absence"};
+		String[] columnNames = { "ID Matiere", "Nom Matiere", "Note DS", "Note Examen","Absence"};
 		
 		table = new JTable(tabNote,columnNames);
 		table.setSurrendersFocusOnKeystroke(true);

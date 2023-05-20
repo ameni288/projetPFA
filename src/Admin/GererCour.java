@@ -35,12 +35,14 @@ import projetPFA.Main;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
-public class ConsulteProf extends JFrame {
+public class GererCour extends JFrame {
 	private JPanel contentPane;
 	private JTable table;
     public static String[][] tabProfs = new String[100][8];
 	public static int n_prof=0;
-	public static String varId="";
+	public static String varIdPROF="";
+	public static String varIdGROUP="";
+
 	
 	public static void getProfs() {
 		n_prof=0;
@@ -48,26 +50,18 @@ public class ConsulteProf extends JFrame {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://localhost/scolarite","root","");
 			Statement st =con.createStatement();
-			ResultSet resEtud = st.executeQuery("select * from professeur");
+			ResultSet resEtud = st.executeQuery("select * from prof_group");
 
 			int j=0;
 		
 			while(resEtud.next()) {
 				tabProfs[j][0] = resEtud.getString(1);
 				tabProfs[j][1] = resEtud.getString(2);
-				tabProfs[j][2] = resEtud.getString(3);
-				tabProfs[j][3] = resEtud.getString(4);
-				tabProfs[j][4] = resEtud.getString(5);
-				tabProfs[j][5] = resEtud.getString(6);
-				tabProfs[j][6] = resEtud.getString(7);
-				tabProfs[j][7] = resEtud.getString(8);
 
-				
 				j++;
 				n_prof++;
 			}
-			//ResultSet resProf = st.executeQuery("select * from professeur");
-			
+	
 		}catch(Exception e) {
 			System.out.print(e.getMessage());
 		}
@@ -78,10 +72,10 @@ public class ConsulteProf extends JFrame {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://localhost/scolarite","root","");
 			Statement st =con.createStatement();
-			String query = "DELETE FROM professeur WHERE id = "+varId;
+			String query = "DELETE FROM prof_group WHERE IDPROF = '" + varIdPROF + "' AND IDGROUPE = '" + varIdGROUP + "'";
 			st.executeUpdate(query);
 			for (int i = 0; i < tabProfs.length; i++) {
-			    for (int j = 0; j < 8; j++) {
+			    for (int j = 0; j < 2; j++) {
 			    	tabProfs[i][j] = null;
 			    }
 			}
@@ -93,7 +87,7 @@ public class ConsulteProf extends JFrame {
 			e1.printStackTrace();
 		}
 	}	
-	public ConsulteProf() {
+	public GererCour() {
 		getContentPane().setForeground(new Color(192, 192, 192));
 		this.setTitle("Gestion de Scolarite PI");
 		setResizable(false);
@@ -116,7 +110,7 @@ public class ConsulteProf extends JFrame {
 		txtpnWelcomeAdmin.setForeground(new Color(255, 255, 255));
 		txtpnWelcomeAdmin.setBackground(new Color(227, 0, 0));
 		txtpnWelcomeAdmin.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 24));
-		txtpnWelcomeAdmin.setText("Liste des Professeurs");
+		txtpnWelcomeAdmin.setText("Affecter Professeurs");
 		txtpnWelcomeAdmin.setBounds(488, 7, 309, 40);
 		panel.add(txtpnWelcomeAdmin);
 		
@@ -139,14 +133,8 @@ public class ConsulteProf extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				int selectedRow = table.getSelectedRow();
 	            if (selectedRow != -1) {
-	                String VID = table.getValueAt(selectedRow, 0).toString();
-	                String VNOM = table.getValueAt(selectedRow, 1).toString();
-	                String VPRENOM = table.getValueAt(selectedRow, 2).toString();
-	                String VLOGIN = table.getValueAt(selectedRow, 3).toString();
-	                String VPASSWORD = table.getValueAt(selectedRow, 4).toString();
-	                String VCNSS = table.getValueAt(selectedRow, 5).toString();
-	                String VHIREDATE = table.getValueAt(selectedRow, 6).toString();
-	                String IDMATIERE = table.getValueAt(selectedRow, 7).toString();
+	                String VIDPROF = table.getValueAt(selectedRow, 0).toString();
+	                String VIDGROUP = table.getValueAt(selectedRow, 1).toString();
 
 	            
 	                try {
@@ -154,10 +142,10 @@ public class ConsulteProf extends JFrame {
 						Connection con = DriverManager.getConnection("jdbc:mysql://localhost/scolarite","root","");
 						Statement st =con.createStatement();
 						if(selectedRow>=n_prof) {
-							String query = "INSERT INTO professeur(`ID`, `NOM`, `PRENOM`, `LOGIN`, `PASSWORD`, `CNSS`, `HIREDATE`, `IDMATIERE`) VALUES ('" + VID + "', '" + VNOM + "', '" + VPRENOM + "', '" + VLOGIN + "', '" + VPASSWORD + "', '" + VCNSS + "', '" + VHIREDATE + "', '" + IDMATIERE + "')";
+							String query = "INSERT INTO prof_group(`IDPROF`, `IDGROUPE`) VALUES ('" + VIDPROF + "', '" + VIDGROUP + "')";
 								st.executeUpdate(query);
 								for (int i = 0; i < tabProfs.length; i++) {
-								    for (int j = 0; j < 8; j++) {
+								    for (int j = 0; j < 2; j++) {
 								    	tabProfs[i][j] = null;
 								    }
 								}
@@ -166,10 +154,11 @@ public class ConsulteProf extends JFrame {
 				                table.repaint();
 				            	Main.GetAuth();
 						}else {
-							String query ="UPDATE `professeur` SET `ID`='"+VID+"',`NOM`='"+VNOM+"',`PRENOM`='"+VPRENOM+"',`LOGIN`='"+VLOGIN+"',`PASSWORD`='"+VPASSWORD+"',`CNSS`='"+VCNSS+"',`HIREDATE`='"+VHIREDATE+"',`IDMATIERE`='"+IDMATIERE+"' WHERE `ID`='"+varId+"'";
+
+							String query = "UPDATE `prof_group` SET `IDPROF`='" + VIDPROF + "', `IDGROUPE`='" + VIDGROUP + "' WHERE `IDPROF`='" + varIdPROF + "' AND `IDGROUPE`='" + varIdGROUP + "'";
 								st.executeUpdate(query);
 								for (int i = 0; i < tabProfs.length; i++) {
-								    for (int j = 0; j < 8; j++) {
+								    for (int j = 0; j < 2; j++) {
 								    	tabProfs[i][j] = null; 
 								    }
 								}
@@ -177,13 +166,22 @@ public class ConsulteProf extends JFrame {
 							table.revalidate();
 				            table.repaint();
 				        	Main.GetAuth();
+
+				        	
 						}
 		             
 						
 					} catch (ClassNotFoundException e1) {
 						e1.printStackTrace();
 					} catch (SQLException e1) {
-						e1.printStackTrace();
+						for (int i = 0; i < tabProfs.length; i++) {
+						    for (int j = 0; j < 2; j++) {
+						    	tabProfs[i][j] = null; 
+						    }
+						}
+						getProfs();
+						table.revalidate();
+			            table.repaint();
 					}
 	            }
 				
@@ -195,9 +193,14 @@ public class ConsulteProf extends JFrame {
 		applyBtn.setBounds(878, 505, 212, 66);
 		getContentPane().add(applyBtn);
 		
+		for (int i = 0; i < tabProfs.length; i++) {
+		    for (int j = 0; j < 2; j++) {
+		    	tabProfs[i][j] = null;
+		    }
+		}
 		getProfs();
 		
-		String[] columnNames = { "ID", "Nom", "Prenom", "Login","Password","Cnss","Hire Date","ID Matière" };
+		String[] columnNames = { "ID Prof", "ID Groupe" };
 		
 		table = new JTable(tabProfs,columnNames);
 		table.setSurrendersFocusOnKeystroke(true);
@@ -213,7 +216,9 @@ public class ConsulteProf extends JFrame {
 		            int selectedRow = table.getSelectedRow();
 		            if (selectedRow != -1) {
 		                Object value = table.getValueAt(selectedRow, 0);
-		                varId=(String) value;
+		                varIdPROF=(String) value;
+		                Object value2 = table.getValueAt(selectedRow, 1);
+		                varIdGROUP=(String) value2;
 		            }
 		        }
 		    }

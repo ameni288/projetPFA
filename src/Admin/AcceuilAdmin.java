@@ -110,6 +110,21 @@ public class AcceuilAdmin extends JFrame {
 		consultEtdBtn_2.setBounds(108, 365, 223, 68);
 		getContentPane().add(consultEtdBtn_2);
 		
+		JButton consultEtdBtn_2_1 = new JButton("Gérer Cour");
+		consultEtdBtn_2_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				GererCour l =new GererCour();
+				l.setVisible(true);
+				dispose(); //setVisible(false);
+			}
+		});
+		consultEtdBtn_2_1.setPreferredSize(new Dimension(161, 21));
+		consultEtdBtn_2_1.setBorder(new LineBorder(new Color(128, 128, 128)));
+		consultEtdBtn_2_1.setBackground(Color.GRAY);
+		consultEtdBtn_2_1.setBounds(108, 462, 223, 68);
+		getContentPane().add(consultEtdBtn_2_1);
+		
+		
 
         JMenuBar menuBar = new JMenuBar();
         JMenu fileMenu = new JMenu("Settings");
