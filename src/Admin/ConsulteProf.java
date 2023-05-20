@@ -38,7 +38,7 @@ import javax.swing.JTextField;
 public class ConsulteProf extends JFrame {
 	private JPanel contentPane;
 	private JTable table;
-    public static String[][] tabProfs = new String[100][8];
+    public static String[][] tabProfs = new String[100][9];
 	public static int n_prof=0;
 	public static String varId="";
 	
@@ -48,19 +48,21 @@ public class ConsulteProf extends JFrame {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://localhost/scolarite","root","");
 			Statement st =con.createStatement();
-			ResultSet resEtud = st.executeQuery("select * from professeur");
+			ResultSet resEtud = st.executeQuery("select * from professeur join matiere on professeur.IDMATIERE=matiere.IDMATIERE");
 
 			int j=0;
 		
 			while(resEtud.next()) {
 				tabProfs[j][0] = resEtud.getString(1);
 				tabProfs[j][1] = resEtud.getString(2);
-				tabProfs[j][2] = resEtud.getString(3);
+				tabProfs[j][2] = resEtud.getString(3); 
 				tabProfs[j][3] = resEtud.getString(4);
 				tabProfs[j][4] = resEtud.getString(5);
 				tabProfs[j][5] = resEtud.getString(6);
 				tabProfs[j][6] = resEtud.getString(7);
 				tabProfs[j][7] = resEtud.getString(8);
+				tabProfs[j][8] = resEtud.getString(10);
+
 
 				
 				j++;
@@ -81,7 +83,7 @@ public class ConsulteProf extends JFrame {
 			String query = "DELETE FROM professeur WHERE id = "+varId;
 			st.executeUpdate(query);
 			for (int i = 0; i < tabProfs.length; i++) {
-			    for (int j = 0; j < 8; j++) {
+			    for (int j = 0; j < 9; j++) {
 			    	tabProfs[i][j] = null;
 			    }
 			}
@@ -157,7 +159,7 @@ public class ConsulteProf extends JFrame {
 							String query = "INSERT INTO professeur(`ID`, `NOM`, `PRENOM`, `LOGIN`, `PASSWORD`, `CNSS`, `HIREDATE`, `IDMATIERE`) VALUES ('" + VID + "', '" + VNOM + "', '" + VPRENOM + "', '" + VLOGIN + "', '" + VPASSWORD + "', '" + VCNSS + "', '" + VHIREDATE + "', '" + IDMATIERE + "')";
 								st.executeUpdate(query);
 								for (int i = 0; i < tabProfs.length; i++) {
-								    for (int j = 0; j < 8; j++) {
+								    for (int j = 0; j < 9; j++) {
 								    	tabProfs[i][j] = null;
 								    }
 								}
@@ -169,7 +171,7 @@ public class ConsulteProf extends JFrame {
 							String query ="UPDATE `professeur` SET `ID`='"+VID+"',`NOM`='"+VNOM+"',`PRENOM`='"+VPRENOM+"',`LOGIN`='"+VLOGIN+"',`PASSWORD`='"+VPASSWORD+"',`CNSS`='"+VCNSS+"',`HIREDATE`='"+VHIREDATE+"',`IDMATIERE`='"+IDMATIERE+"' WHERE `ID`='"+varId+"'";
 								st.executeUpdate(query);
 								for (int i = 0; i < tabProfs.length; i++) {
-								    for (int j = 0; j < 8; j++) {
+								    for (int j = 0; j < 9; j++) {
 								    	tabProfs[i][j] = null; 
 								    }
 								}
@@ -197,9 +199,13 @@ public class ConsulteProf extends JFrame {
 		
 		getProfs();
 		
-		String[] columnNames = { "ID", "Nom", "Prenom", "Login","Password","Cnss","Hire Date","ID Matière" };
+		String[] columnNames = { "ID", "Nom", "Prenom", "Login","Password","Cnss","Hire Date","ID Matière" ,"NOM MATIERE"};
 		
-		table = new JTable(tabProfs,columnNames);
+		table = new JTable(tabProfs, columnNames) {
+		    public boolean isCellEditable(int row, int column) {
+		        return column < 8;
+		    }
+		};
 		table.setSurrendersFocusOnKeystroke(true);
 		table.setBounds(137, 96, 901, 380);
 		JScrollPane scrollPane = new JScrollPane(table); 

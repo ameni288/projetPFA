@@ -47,7 +47,7 @@ public class GererNote extends JFrame {
 	
 	public static void getEtudiants() {
 		n_etd=0;
-		String IDMATIERE="";
+		String IDMATIERE=""; 
 		String NOMMATIERE="";
 		int j=0;
 		
@@ -65,7 +65,8 @@ public class GererNote extends JFrame {
 			    	IDMATIERE = resMatiere.getString(2);    
 			}   
 			 
-			String query = "SELECT etudiant.ID, etudiant.NOM, etudiant.PRENOM, evaluation.IDMATIERE, matiere.NOM, evaluation.NOTE_DS, evaluation.NOTE_EXAMEN, evaluation.ABSCENCE FROM etudiant LEFT JOIN evaluation ON etudiant.ID = evaluation.IDETUDIANT LEFT JOIN matiere ON matiere.IDMATIERE = evaluation.IDMATIERE WHERE IDGROUPE = (SELECT IDGROUPE FROM groupe WHERE Nom like '" + ChoisirGroupe.GroupChoisi + "')";
+			String query = "SELECT etudiant.ID, etudiant.NOM, etudiant.PRENOM, evaluation.IDMATIERE, matiere.NOM, evaluation.NOTE_DS, evaluation.NOTE_EXAMEN, evaluation.ABSCENCE FROM etudiant LEFT JOIN evaluation ON etudiant.ID = evaluation.IDETUDIANT and evaluation.IDPROF = '"+ Main.auth[Login.index].id + "'"
+					+ "     LEFT JOIN matiere on evaluation.IDMATIERE=matiere.IDMATIERE WHERE IDGROUPE = (SELECT IDGROUPE FROM groupe WHERE Nom like '" + ChoisirGroupe.GroupChoisi + "')";
 			ResultSet resEtud = st.executeQuery(query);
 			
 			while(resEtud.next()) {
@@ -159,7 +160,7 @@ public class GererNote extends JFrame {
 						Connection con = DriverManager.getConnection("jdbc:mysql://localhost/scolarite","root","");
 						Statement st =con.createStatement();
 						if( varNote==null && varType==null && varAbscence==null) {
-							   String query = "INSERT INTO `evaluation`(`IDETUDIANT`, `IDPROF`, `IDMATIERE`, `NOTE_DS`, `NOTE_Examen`, `ABSCENCE`) VALUES ('"+VIDETUDIANT+"', '"+Login.index+"', '"+VIDMATIERE+"', '"+VNOTE+"', '"+VTYPE+"', '"+VABSCENCE+"')";
+							   String query = "INSERT INTO `evaluation`(`IDETUDIANT`, `IDPROF`, `IDMATIERE`, `NOTE_DS`, `NOTE_Examen`, `ABSCENCE`) VALUES ('"+VIDETUDIANT+"', '"+Main.auth[Login.index].id+"', '"+VIDMATIERE+"', '"+VNOTE+"', '"+VTYPE+"', '"+VABSCENCE+"')";
 								st.executeUpdate(query);
 							
 								getEtudiants();
@@ -167,7 +168,7 @@ public class GererNote extends JFrame {
 				                table.repaint();
 						}else {
 							
-							String query = "UPDATE `evaluation` SET `NOTE_DS`='" + VNOTE + "', `NOTE_EXAMen`='" + VTYPE + "', `ABSCENCE`='" + VABSCENCE + "' WHERE `IDETUDIANT`='" + VIDETUDIANT + "' AND `IDPROF`='" + Login.index + "' AND `IDMATIERE`='" + VIDMATIERE + "'";
+							String query = "UPDATE `evaluation` SET `NOTE_DS`='" + VNOTE + "', `NOTE_EXAMen`='" + VTYPE + "', `ABSCENCE`='" + VABSCENCE + "' WHERE `IDETUDIANT`='" + VIDETUDIANT + "' AND `IDPROF`='" +Main.auth[Login.index].id + "' AND `IDMATIERE`='" + VIDMATIERE + "'";
 							st.executeUpdate(query);
 								
 							getEtudiants();

@@ -34,7 +34,7 @@ public class Login extends JFrame {
 	this.setLocationRelativeTo(null);
 	this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	getContentPane().setLayout(null);
-	
+	 
 	JPanel panel = new JPanel();
 	panel.setLocation(-2, -2);
 	panel.setSize(new Dimension(1288, 50));

@@ -32,7 +32,7 @@ public class AcceuilEtudiant extends JFrame {
 		this.setSize(1300,800);
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		getContentPane().setLayout(null);
+		getContentPane().setLayout(null); 
 		
 		JPanel panel = new JPanel();
 		panel.setLocation(0, 0);
@@ -72,7 +72,10 @@ public class AcceuilEtudiant extends JFrame {
         JMenuItem changerItem = new JMenuItem("Changer mot de passe");
         changerItem.addActionListener(new ActionListener() {
     		public void actionPerformed(ActionEvent e) {
-    			
+    		
+    			ChangerPassword l =new ChangerPassword();
+				l.setVisible(true);
+				dispose(); //setVisible(false);
     		}
     	});
         JMenuItem logoutItem = new JMenuItem("Déconnexion");

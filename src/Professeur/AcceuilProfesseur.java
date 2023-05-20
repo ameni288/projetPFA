@@ -62,7 +62,7 @@ public class AcceuilProfesseur extends JFrame {
 		consultEtdBtn.addActionListener(new ActionListener() {
     		public void actionPerformed(ActionEvent e) {
     			ChoisirGroupe l =new ChoisirGroupe();
-				l.setVisible(true);
+				l.setVisible(true); 
 				dispose(); //setVisible(false);
     		}
     	});
@@ -73,7 +73,9 @@ public class AcceuilProfesseur extends JFrame {
         JMenuItem changerItem = new JMenuItem("Changer mot de passe");
         changerItem.addActionListener(new ActionListener() {
     		public void actionPerformed(ActionEvent e) {
-    			
+    			ChangerPassword l =new ChangerPassword();
+				l.setVisible(true);
+				dispose(); //setVisible(false);
     		}
     	});
         JMenuItem logoutItem = new JMenuItem("Déconnexion");

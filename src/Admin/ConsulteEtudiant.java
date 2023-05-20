@@ -41,7 +41,7 @@ public class ConsulteEtudiant extends JFrame {
     public static String[][] tabEtudiant = new String[100][8];
 	public static int n_etd=0;
 	public static String varId="";
-	
+	 
 	public static void getEtudiants() {
 		n_etd=0;
 		try {
@@ -83,6 +83,7 @@ public class ConsulteEtudiant extends JFrame {
 			    }
 			}
 			getEtudiants();
+			Main.GetAuth(); 
 			
 		} catch (ClassNotFoundException e1) {
 			e1.printStackTrace();
