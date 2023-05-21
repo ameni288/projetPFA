@@ -49,7 +49,7 @@ public class ConsulterNote extends JFrame {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://localhost/scolarite","root","");
 			Statement st =con.createStatement();
-			ResultSet resNote = st.executeQuery("select e.IDMATIERE,matiere.nom,note_ds,note_examen,abscence from evaluation e join matiere on e.idmatiere=matiere.idmatiere where idetudiant ="+Main.auth[Login.index].id);
+			ResultSet resNote = st.executeQuery("select e.IDMATIERE,matiere.nom,note_ds,note_examen,abscence from evaluation e join matiere on e.idmatiere=matiere.idmatiere where e.idetudiant ="+Main.auth[Login.index].id);
 
 			int j=0;
 		
@@ -110,18 +110,26 @@ public class ConsulterNote extends JFrame {
 		consultAgentBtn.setBounds(527, 505, 232, 78);
 		getContentPane().add(consultAgentBtn);
 	
-	
+		for(int i=0;i<tabNote.length;i++) {
+			for(int j=0;j<5;j++)
+			{
+				tabNote[i][j]=null;
+			}
+		}
         getNotes();
 		String[] columnNames = { "ID Matiere", "Nom Matiere", "Note DS", "Note Examen","Absence"};
 		
-		table = new JTable(tabNote,columnNames);
+		table = new JTable(tabNote, columnNames) {
+		    public boolean isCellEditable(int row, int column) {
+		        return column >= 5;
+		    }
+		};
 		table.setSurrendersFocusOnKeystroke(true);
 		table.setBounds(137, 96, 901, 380);
 		JScrollPane scrollPane = new JScrollPane(table); 
 		scrollPane.setBounds(137, 96, 901, 380);
 		getContentPane().add(scrollPane);
-		
-		
+	
 		
         
 	  
